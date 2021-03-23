@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_ARRAY=("deployment" "parent-pom" "base-platform" "account-platform" "e-commerce" "base-executor")
+PROJECT_ARRAY=("ee-environment" "deployment" "parent-pom" "base-platform" "account-platform" "e-commerce" "base-executor")
 
 function pullAll() {
     for i in "${PROJECT_ARRAY[@]}"
