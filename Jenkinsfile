@@ -49,12 +49,7 @@ pipeline {
         }
     }
     post {
-        success {
-            sh '''
-                 mvn versions:commit
-            '''
-        }
-        failure {
+        always {
             sh '''
                  mvn versions:revert
             '''
