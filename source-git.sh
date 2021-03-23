@@ -1,9 +1,17 @@
 #!/bin/bash
 
 PROJECT_ARRAY=("ee-environment" "deployment" "parent-pom" "base-platform" "account-platform" "e-commerce" "base-executor")
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+
+
+function pushAll() {
+    for i in "${PROJECT_ARRAY[@]}"
+    do
+        git add .
+        git commit -m "$1"
+    done
+}
 
 function pullAll() {
     for i in "${PROJECT_ARRAY[@]}"
@@ -88,11 +96,18 @@ then
     exit 0
 fi
 
+if [ "$OPTION" == "--all" ] && [ "$COMMAND" == "push" ]
+then
+    pushAll "$2"
+    exit 0
+fi
+
 echo "Only available commands:
       clone --all
       clone --one <repository>
       pull --all
       pull --one <repository>
       status --all
-      status --one <repository> "
+      status --one <repository>
+      push --all <message> "
 exit 1
