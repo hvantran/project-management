@@ -12,9 +12,9 @@ pipeline {
                     echo ***************************************
                     echo **          CLONE SOURCE             **
                     echo ***************************************
-                    source-git.sh clone --all
+                    ./source-git.sh clone --all
 
-                    source-git.sh pull --all
+                    ./source-git.sh pull --all
                 '''
             }
         }
