@@ -1,6 +1,9 @@
 #!/bin/bash
 
 PROJECT_ARRAY=("ee-environment" "deployment" "parent-pom" "base-platform" "account-platform" "e-commerce" "base-executor")
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
 
 function pullAll() {
     for i in "${PROJECT_ARRAY[@]}"
@@ -11,9 +14,25 @@ function pullAll() {
 
 function pullOne() {
     REPOSITORY=$1
+    echo -e "Pull repository $GREEN$REPOSITORY$NC"
     cd "$REPOSITORY"
     git pull
-    cd -
+    cd ../
+}
+
+function statusAll() {
+    for i in "${PROJECT_ARRAY[@]}"
+    do
+        statusOne "$i"
+    done
+}
+
+function statusOne() {
+    REPOSITORY=$1
+    echo -e "Checking status repository $GREEN$REPOSITORY$NC"
+    cd "$REPOSITORY"
+    git status
+    cd ../
 }
 
 function cloneAll() {
@@ -25,21 +44,13 @@ function cloneAll() {
 
 function cloneOne() {
     REPOSITORY=$1
+    echo -e "Clone repository $GREEN$REPOSITORY$NC"
     git clone git@github.com:hvantran/"$REPOSITORY".git
 }
 
 COMMAND=$1
 OPTION=$2
 REPO=$3
-FULL_COMMAND=""
-
-if [ "$COMMAND" == "clone" ] || [ "$COMMAND" == "pull" ]
-then
-    FULL_COMMAND=${FULL_COMMAND}${COMMAND}
-else
-    echo "Available commands: clone/pull --all/--one <repository> "
-    exit 1
-fi
 
 if [ "$OPTION" == "--all" ] && [ "$COMMAND" == "clone" ]
 then
@@ -64,3 +75,24 @@ then
     cloneOne "$REPO"
     exit 0
 fi
+
+if [ "$OPTION" == "--all" ] && [ "$COMMAND" == "status" ]
+then
+    statusAll
+    exit 0
+fi
+
+if [ "$OPTION" == "--one" ] && [ "$COMMAND" == "status" ]
+then
+    statusOne "$REPO"
+    exit 0
+fi
+
+echo "Only available commands:
+      clone --all
+      clone --one <repository>
+      pull --all
+      pull --one <repository>
+      status --all
+      status --one <repository> "
+exit 1

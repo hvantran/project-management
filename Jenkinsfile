@@ -5,7 +5,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh '''
-                    ls -la ~/.ssh
                     bash -x source-git.sh clone --all
                     bash -x source-git.sh pull --all
                 '''
