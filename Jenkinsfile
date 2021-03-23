@@ -9,9 +9,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh '''
-                    echo ***************************************
-                    echo **          CLONE SOURCE             **
-                    echo ***************************************
+                    echo "***************************************"
+                    echo "**          CLONE SOURCE             **"
+                    echo "***************************************"
                     ./source-git.sh clone --all
 
                     ./source-git.sh pull --all
@@ -22,9 +22,9 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    echo ***************************************
-                    echo **          BUILD SOURCE             **
-                    echo ***************************************
+                    echo "***************************************"
+                    echo "**          BUILD SOURCE             **"
+                    echo "***************************************"
                     PROJECT_VERSION=$PROJECT_VERSION_PREFIX$BUILD_NUMBER
                     echo Current project version $PROJECT_VERSION
 
