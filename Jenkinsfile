@@ -8,19 +8,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git scm
-            }
-        }
-
-        stage('Build') {
-            steps {
                 sh '''
                     echo ***************************************
                     echo **          CLONE SOURCE             **
                     echo ***************************************
                     source-git.sh clone --all
 
+                    source-git.sh pull --all
+                '''
+            }
+        }
 
+        stage('Build') {
+            steps {
+                sh '''
                     echo ***************************************
                     echo **          BUILD SOURCE             **
                     echo ***************************************
