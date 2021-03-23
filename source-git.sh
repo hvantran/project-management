@@ -8,8 +8,11 @@ NC='\033[0m'
 function pushAll() {
     for i in "${PROJECT_ARRAY[@]}"
     do
+        cd "$i"
         git add .
         git commit -m "$1"
+        git push
+        cd ../
     done
 }
 
@@ -98,7 +101,7 @@ fi
 
 if [ "$OPTION" == "--all" ] && [ "$COMMAND" == "push" ]
 then
-    pushAll "$2"
+    pushAll "$3"
     exit 0
 fi
 
