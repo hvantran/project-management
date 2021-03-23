@@ -48,4 +48,16 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            sh '''
+                 mvn versions:commit
+            '''
+        }
+        failure {
+            sh '''
+                 mvn versions:revert
+            '''
+        }
+    }
 }
