@@ -5,7 +5,7 @@ PROJECT_ARRAY=("deployment" "parent-pom" "base-platform" "account-platform" "e-c
 function pullAll() {
     for i in "${PROJECT_ARRAY[@]}"
     do
-        pullOne $i
+        pullOne "$i"
     done
 }
 
@@ -19,13 +19,13 @@ function pullOne() {
 function cloneAll() {
     for i in "${PROJECT_ARRAY[@]}"
     do
-        cloneOne $i
+        cloneOne "$i"
     done
 }
 
 function cloneOne() {
     REPOSITORY=$1
-    git clone https://github.com/hvantran/"${REPOSITORY}".git
+    git clone git@github.com:hvantran/"$REPOSITORY".git
 }
 
 COMMAND=$1
