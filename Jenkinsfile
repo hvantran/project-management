@@ -15,10 +15,21 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    mvn
-                    ./ee-environment/source-git.sh clone --all
+                    echo ***************************************
+                    echo **          CLONE SOURCE             **
+                    echo ***************************************
+                    source-git.sh clone --all
+
+
+                    echo ***************************************
+                    echo **          BUILD SOURCE             **
+                    echo ***************************************
                     PROJECT_VERSION=$PROJECT_VERSION_PREFIX$BUILD_NUMBER
+                    echo Current project version $PROJECT_VERSION
+
+                    echo Settings version for all project $PROJECT_VERSION
                     mvn versions:set -DnewVersion=$PROJECT_VERSION
+
                     mvn clean install -DskipTests -DskipDocker
                 '''
             }
