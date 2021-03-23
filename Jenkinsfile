@@ -5,6 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh '''
+                    ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
                     bash -x source-git.sh clone --all
                     bash -x source-git.sh pull --all
                 '''
