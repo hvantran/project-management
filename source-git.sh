@@ -16,6 +16,15 @@ function pushAll() {
     done
 }
 
+function execAll() {
+    for i in "${PROJECT_ARRAY[@]}"
+    do
+        cd "$i"
+        $1
+        cd ../
+    done
+}
+
 function pullAll() {
     for i in "${PROJECT_ARRAY[@]}"
     do
@@ -105,6 +114,12 @@ then
     exit 0
 fi
 
+if [ "$COMMAND" == "exec" ]
+then
+    execAll "$2"
+    exit 0
+fi
+
 echo "Only available commands:
       clone --all
       clone --one <repository>
@@ -112,5 +127,6 @@ echo "Only available commands:
       pull --one <repository>
       status --all
       status --one <repository>
-      push --all <message> "
+      push --all <message>
+      exec <command> "
 exit 1
