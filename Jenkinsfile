@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    def app
     stages {
         stage('Checkout') {
             steps {
@@ -17,7 +17,7 @@ pipeline {
                     PROJECT_VERSION_PREFIX='1.0.'
                     PROJECT_VERSION=$PROJECT_VERSION_PREFIX$BUILD_NUMBER
                     mvn versions:set -DnewVersion=$PROJECT_VERSION
-                    mvn clean install -DskipTests -DskipDocker
+                    mvn clean install -DskipTests
                 '''
             }
         }
@@ -25,14 +25,17 @@ pipeline {
         stage('Unit Tests') {
             steps {
                 sh '''
-                    mvn test -DskipDocker
+                    mvn test
                 '''
             }
         }
 
         stage('Publish Artifacts') {
             steps {
-                echo '''TODO'''
+                sh '''
+                    docker login -u  tranvanhoa2810 -p $DOCKER_HUB_PASS
+                    mvn deploy -Dmaven.install.skip=true -DskipTests
+                '''
             }
         }
 
