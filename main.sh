@@ -68,6 +68,11 @@ function cloneOne() {
     git clone git@github.com:hvantran/"$REPOSITORY".git
 }
 
+function deploy() {
+    cd deployment/target/classes
+    docker compose -f "${1}".yml up -d
+}
+
 COMMAND=$1
 OPTION=$2
 REPO=$3
@@ -120,6 +125,12 @@ then
     exit 0
 fi
 
+if [ "$COMMAND" == "deploy" ]
+then
+    deploy "$2"
+    exit 0
+fi
+
 echo "Only available commands:
       clone --all
       clone --one <repository>
@@ -128,5 +139,6 @@ echo "Only available commands:
       status --all
       status --one <repository>
       push --all <message>
-      exec <command> "
+      exec <command>
+      deploy <product-name>"
 exit 1

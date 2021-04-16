@@ -4,8 +4,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh '''
-                    ./source-git.sh clone --all
-                    ./source-git.sh pull --all
+                    ./main.sh clone --all
+                    ./main.sh pull --all
                 '''
             }
         }
@@ -32,8 +32,8 @@ pipeline {
         stage('Publish Artifacts') {
             steps {
                 sh '''
-                    docker login -u  tranvanhoa2810 -p $DOCKER_HUB_PASS
-                    mvn deploy -Dmaven.install.skip=true -DskipTests
+                    #docker login -u  tranvanhoa2810 -p $DOCKER_HUB_PASS
+                    #mvn deploy -Dmaven.install.skip=true -DskipTests
                 '''
             }
         }
@@ -46,7 +46,9 @@ pipeline {
 
         stage('Deploy Production') {
             steps {
-                echo '''TODO'''
+                sh '''
+                    ./main.sh deploy e-commerce
+                '''
             }
         }
     }
