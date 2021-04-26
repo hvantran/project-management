@@ -6,6 +6,7 @@
 
 # BlueJ files
 *.ctxt
+**/target/**
 
 account-platform
 base-executor
