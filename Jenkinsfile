@@ -47,7 +47,9 @@ pipeline {
         stage('Deploy Production') {
             steps {
                 sh '''
-                    ./main.sh deploy e-commerce
+                    ./main.sh deploy elk-stack && \
+                    ./main.sh deploy ecommerce && \
+                    ./main.sh deploy coin-agent
                 '''
             }
         }

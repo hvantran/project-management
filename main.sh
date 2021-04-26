@@ -69,7 +69,7 @@ function cloneOne() {
 }
 
 function deploy() {
-    cd deployment/target/classes
+    cd deployment/${1}/target/classes
     docker compose -f "${1}".yml up -d
 }
 
