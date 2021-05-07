@@ -48,7 +48,6 @@ pipeline {
             steps {
                 sh '''
                     ./main.sh deploy elk-stack && \
-                    sleep 1m && \
                     ./main.sh deploy ecommerce && \
                     ./main.sh deploy coin-agent
                 '''
