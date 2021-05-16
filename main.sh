@@ -69,8 +69,15 @@ function cloneOne() {
 }
 
 function deploy() {
-    cd deployment/${1}/target/classes
-    docker compose -f "${1}".yml up -d
+    TARGET=${1}
+    APPLICATION=${2}
+    if [ "${TARGET}" == "DOCKER" ]
+    then
+        cd deployment/"${APPLICATION}"/target/classes
+        docker compose -f "${APPLICATION}".yml up -d
+    elif [ "${TARGET}" == "K8S" ]; then
+        echo "K8S deployment"
+    fi
 }
 
 COMMAND=$1
