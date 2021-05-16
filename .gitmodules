@@ -1,0 +1,21 @@
+[submodule "parent-pom"]
+	path = parent-pom
+	url = https://github.com/hvantran/parent-pom
+[submodule "deployment"]
+	path = deployment
+	url = https://github.com/hvantran/deployment.git
+[submodule "ee-environment"]
+	path = ee-environment
+	url = https://github.com/hvantran/ee-environment
+[submodule "base-platform"]
+	path = base-platform
+	url = https://github.com/hvantran/base-platform
+[submodule "account-platform"]
+	path = account-platform
+	url = https://github.com/hvantran/account-platform
+[submodule "e-commerce"]
+	path = e-commerce
+	url = https://github.com/hvantran/e-commerce
+[submodule "base-executor"]
+	path = base-executor
+	url = https://github.com/hvantran/base-executor

@@ -8,14 +8,6 @@
 *.ctxt
 **/target/**
 
-account-platform
-base-executor
-base-platform
-deployment
-e-commerce
-ee-environment
-parent-pom
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
