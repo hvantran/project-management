@@ -4,8 +4,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh '''
-                    ./main.sh clone --all
-                    ./main.sh pull --all
+					git submodule update --init
                 '''
             }
         }
@@ -47,9 +46,10 @@ pipeline {
         stage('Deploy Production') {
             steps {
                 sh '''
-                    ./main.sh deploy elk-stack && \
-                    ./main.sh deploy ecommerce && \
-                    ./main.sh deploy coin-agent
+                    #./main.sh deploy elk-stack && \
+                    #./main.sh deploy ecommerce && \
+                    #./main.sh deploy coin-agent
+					echo 'TODO'
                 '''
             }
         }
