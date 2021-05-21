@@ -134,7 +134,7 @@ fi
 
 if [ "$COMMAND" == "deploy" ]
 then
-    deploy "$2"
+    deploy "$2" "$3"
     exit 0
 fi
 
