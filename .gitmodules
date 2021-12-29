@@ -16,6 +16,3 @@
 [submodule "e-commerce"]
 	path = e-commerce
 	url = https://github.com/hvantran/e-commerce
-[submodule "base-executor"]
-	path = base-executor
-	url = https://github.com/hvantran/base-executor
