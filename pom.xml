@@ -14,7 +14,6 @@
         <module>deployment</module>
         <module>ee-environment</module>
         <module>base-platform</module>
-        <module>base-executor</module>
         <module>account-platform</module>
         <module>e-commerce</module>
     </modules>
