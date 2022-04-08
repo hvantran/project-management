@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_ARRAY=("parent-pom" "ee-environment" "deployment" "base-platform" "account-platform" "base-executor" "e-commerce" )
+PROJECT_ARRAY=("parent-pom" "ee-environment" "deployment" "base-platform" "account-platform" "e-commerce" )
 GREEN='\033[0;32m'
 NC='\033[0m'
 
