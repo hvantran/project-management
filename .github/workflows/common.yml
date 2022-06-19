@@ -1,4 +1,3 @@
-name: Project Management Common CI
 on:
   workflow_call:
 jobs:
