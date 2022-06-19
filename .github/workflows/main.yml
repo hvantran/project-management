@@ -11,15 +11,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    uses: hvantran/project-management/.github/workflows/common.yml@main
     steps:
+      - uses: ./.github/workflows/actions/common
       - name: Run Maven build command
         run: mvn clean install -DskipTests
         
   test:
     needs: build
     runs-on: ubuntu-latest
-    uses: hvantran/project-management/.github/workflows/common.yml@main
     steps:
+      - uses: ./.github/workflows/actions/common
       - name: Run Maven test command
         run: mvn test
