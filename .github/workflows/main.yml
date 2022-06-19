@@ -27,5 +27,7 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
+      - name: Run Maven dependency tree -f e-commerce
+        run: mvn dependency:tree
       - name: Run Maven build command
         run: mvn clean install -DskipTests
