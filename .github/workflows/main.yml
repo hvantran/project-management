@@ -11,7 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -29,3 +28,10 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
       - name: Run Maven build command
         run: mvn clean install -DskipTests
+        
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Maven test command
+        run: mvn test
