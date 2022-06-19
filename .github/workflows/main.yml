@@ -16,7 +16,7 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-      - uses: ./.github/workflows/actions/common
+      - uses: ./.github/workflows/actions
       - name: Run Maven build command
         run: mvn clean install -DskipTests
         
@@ -24,6 +24,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/actions/common
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - uses: ./.github/workflows/actions
       - name: Run Maven test command
         run: mvn test
