@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    uses: hvantran/project-management/.github/workflows/common.yml@main
     steps:
       - name: Run Maven build command
         run: mvn clean install -DskipTests
@@ -18,7 +19,7 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    uses: hvantran/project-management/.github/workflows/common@main
+    uses: hvantran/project-management/.github/workflows/common.yml@main
     steps:
       - name: Run Maven test command
         run: mvn test
