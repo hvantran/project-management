@@ -6,4 +6,8 @@ runs:
       with:
         java-version: '17'
         distribution: 'adopt'
-        cache: 'maven'
+    - uses: actions/cache@v3.0.4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-
