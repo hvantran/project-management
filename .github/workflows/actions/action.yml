@@ -6,3 +6,4 @@ runs:
       with:
         java-version: '17'
         distribution: 'adopt'
+        cache: 'maven'
