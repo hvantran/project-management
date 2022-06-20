@@ -17,7 +17,7 @@ jobs:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
       - uses: ./.github/workflows/actions
-      - name: Run Maven build command
+      - name: Run Maven Build Command
         run: mvn clean install -DskipTests
         
   test:
@@ -29,5 +29,5 @@ jobs:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
       - uses: ./.github/workflows/actions
-      - name: Run Maven test command
+      - name: Run Maven Test Command
         run: mvn test
