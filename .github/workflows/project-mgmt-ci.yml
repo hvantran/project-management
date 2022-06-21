@@ -16,9 +16,14 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - uses: ./.github/workflows/actions
       - name: Run Maven Build Command
         run: mvn clean install -DskipTests
+      - name: Analyze with sonar cloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=nashtech-garage_yas
         
   Unit-Tests:
     needs: Build
@@ -31,11 +36,6 @@ jobs:
       - uses: ./.github/workflows/actions
       - name: Run Maven Test Command
         run: mvn test
-#      - name: Publish Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v1
-#        if: always()
-#        with:
-#          files: "**/surefire-reports/*.xml"
       - name: Unit Test Results
         uses: dorny/test-reporter@v1
         if: always()
