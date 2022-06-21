@@ -23,7 +23,7 @@ jobs:
       - name: Analyze with sonar cloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hvantran_project-management
+        run: mvn sonar:sonar
         
   Unit-Tests:
     needs: Build
