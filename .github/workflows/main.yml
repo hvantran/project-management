@@ -20,6 +20,10 @@ jobs:
       - uses: ./.github/workflows/actions
       - name: Run Maven Build Command
         run: mvn clean install -DskipTests
+      - name: Analyze properties
+        run: |
+          mvn validate -f base-platform;
+          mvn validate -f e-commerce;
       - name: Analyze with sonar cloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
