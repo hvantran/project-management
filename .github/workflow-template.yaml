@@ -1,0 +1,54 @@
+name: {{SERVICE_NAME}} service ci
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "{{SERVICE_NAME}}/**"
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "{{SERVICE_NAME}}/**"
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
+      
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven build
+        run: |
+          mvn clean install -DskipTests -f parent-pom &&
+          mvn clean install -DskipTests -f base-platform &&
+          mvn clean install -DskipTests -f {{SERVICE_NAME}}
+      - name: Analyze with sonar cloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_{{SERVICE_NAME}} -f {{SERVICE_NAME}}
+
+  Unit-Tests:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions
+      - name: Run maven test
+        run: mvn test -f {{SERVICE_NAME}}
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Unit-Test-Results
+          path: "{{SERVICE_NAME}}/**/surefire-reports/*.xml"
+          reporter: java-junit
