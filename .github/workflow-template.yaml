@@ -53,12 +53,11 @@ jobs:
         run: mvn test -f {{SERVICE_NAME}}
       - name: Unit test results
         uses: dorny/test-reporter@v1
-        if: always()
         with:
           name: Unit-Test-Results
           path: "{{SERVICE_NAME}}/**/surefire-reports/*.xml"
           reporter: java-junit
-  Deploy-Artifacts:
+  Deploy:
     needs: Unit-Tests
     runs-on: ubuntu-latest
     steps:
