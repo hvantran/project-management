@@ -44,6 +44,6 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Unit-Test-Results
-          path: "**/surefire-reports/*"
+          path: "**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
