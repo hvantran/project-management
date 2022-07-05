@@ -29,6 +29,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
       - uses: ./.github/workflows/actions
       - name: Run maven build
         run: |
@@ -78,4 +80,4 @@ jobs:
         with:
           context: ./{{SERVICE_NAME}}
           push: true
-          tags: ghcr.io/htranvan/{{SERVICE_NAME}}:latest
+          tags: ${{ env.IMAGE_NAME }}/{{SERVICE_NAME}}:latest
