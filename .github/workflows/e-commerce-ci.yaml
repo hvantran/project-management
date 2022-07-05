@@ -89,4 +89,4 @@ jobs:
         with:
           context: ./e-commerce
           push: true
-          tags: ${{ env.IMAGE_NAME }}/e-commerce:latest
+          tags: ghcr.io/htranvan/e-commerce:latest
