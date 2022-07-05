@@ -89,4 +89,4 @@ jobs:
         with:
           context: ./e-commerce
           push: true
-          tags: ghcr.io/htranvan/e-commerce:latest
+          tags: ghcr.io/hvantran/e-commerce:latest

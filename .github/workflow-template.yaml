@@ -89,4 +89,4 @@ jobs:
         with:
           context: ./{{SERVICE_NAME}}
           push: true
-          tags: ghcr.io/htranvan/{{SERVICE_NAME}}:latest
+          tags: ghcr.io/hvantran/{{SERVICE_NAME}}:latest
