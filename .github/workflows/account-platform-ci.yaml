@@ -5,12 +5,14 @@ on:
     branches: [ "main" ]
     paths:
       - "account-platform/**"
+      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/account-platform-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
       - "account-platform/**"
+      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/account-platform-ci.yaml"
       

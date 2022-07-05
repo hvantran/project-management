@@ -5,12 +5,14 @@ on:
     branches: [ "main" ]
     paths:
       - "e-commerce/**"
+      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/e-commerce-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
       - "e-commerce/**"
+      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/e-commerce-ci.yaml"
       
