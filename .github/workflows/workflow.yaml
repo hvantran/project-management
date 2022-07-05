@@ -39,11 +39,11 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run Maven Test Command
-        run: mvn test
+        run: mvn test -Dmaven.test.failure.ignore=true
       - name: Unit Test Results
         uses: dorny/test-reporter@v1
-        if: success() || failure()
         with:
           name: Unit-Test-Results
-          path: "**/surefire-reports/*.xml"
+          path: "**/surefire-reports/*"
           reporter: java-junit
+          fail-on-error: true
