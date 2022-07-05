@@ -28,9 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run maven build
         run: |
@@ -50,6 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run maven test
         run: mvn test -f e-commerce
@@ -64,6 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run maven package
         run: mvn clean package -DskipTests -f e-commerce
