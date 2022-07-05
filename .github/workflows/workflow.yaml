@@ -34,9 +34,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run Maven Test Command
         run: mvn test
