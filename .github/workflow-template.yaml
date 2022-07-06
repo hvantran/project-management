@@ -2,7 +2,6 @@ name: {{SERVICE_NAME}} service ci
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 on:
   push:
@@ -10,12 +9,14 @@ on:
     paths:
       - "{{SERVICE_NAME}}/**"
       - "base-platform/**"
+      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
       - "{{SERVICE_NAME}}/**"
+      - "parent-pom/**"
       - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"

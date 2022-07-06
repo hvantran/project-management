@@ -2,7 +2,6 @@ name: e-commerce service ci
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 on:
   push:
@@ -10,12 +9,14 @@ on:
     paths:
       - "e-commerce/**"
       - "base-platform/**"
+      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/e-commerce-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
       - "e-commerce/**"
+      - "parent-pom/**"
       - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/e-commerce-ci.yaml"
