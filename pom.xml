@@ -20,5 +20,6 @@
         <module>base-platform</module>
         <module>account-platform</module>
         <module>e-commerce</module>
+        <module>native-db-client</module>
     </modules>
 </project>
