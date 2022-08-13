@@ -16,6 +16,3 @@
 [submodule "e-commerce"]
 	path = e-commerce
 	url = https://github.com/hvantran/e-commerce
-[submodule "native-db-client"]
-	path = native-db-client
-	url = https://github.com/hvantran/native-db-client
