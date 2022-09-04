@@ -20,5 +20,7 @@
         <module>base-platform</module>
         <module>account-platform</module>
         <module>e-commerce</module>
+        <module>base-platform/common-apps/spring-cloud-gateway-app</module>
+        <module>base-platform/common-apps/ext-endpoint-collector</module>
     </modules>
 </project>
