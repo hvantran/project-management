@@ -3,7 +3,7 @@
 	url = https://github.com/hvantran/parent-pom
 [submodule "deployment"]
 	path = deployment
-	url = https://github.com/hvantran/deployment
+	url = git@github.com:hvantran/deployment.git
 [submodule "ee-environment"]
 	path = ee-environment
 	url = https://github.com/hvantran/ee-environment
