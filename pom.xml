@@ -19,8 +19,10 @@
         <module>ee-environment</module>
         <module>base-platform</module>
         <module>account-platform</module>
-        <module>e-commerce</module>
+        <module>base-platform/common-apps/system-health-statistics</module>
         <module>base-platform/common-apps/spring-cloud-gateway-app</module>
-        <module>base-platform/common-apps/ext-endpoint-collector</module>
+        <module>services/ecommerce-stats-app</module>
+        <module>services/external-endpoint-collector</module>
+        <module>services/template-management-app</module>
     </modules>
 </project>
