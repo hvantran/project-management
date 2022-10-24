@@ -19,3 +19,6 @@
 [submodule "services/template-management-app"]
 	path = services/template-management-app
 	url = git@github.com-hvantran:hvantran/template-management-app.git
+[submodule "services/external-endpoint-collector"]
+	path = services/external-endpoint-collector
+	url = git@github.com-hvantran:hvantran/external-endpoint-collector.git
