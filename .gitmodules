@@ -22,3 +22,6 @@
 [submodule "services/external-endpoint-collector"]
 	path = services/external-endpoint-collector
 	url = git@github.com-hvantran:hvantran/external-endpoint-collector.git
+[submodule "services/ecommerce-stats-app"]
+	path = services/ecommerce-stats-app
+	url = git@github.com-hvantran:hvantran/ecommerce-stats-app.git
