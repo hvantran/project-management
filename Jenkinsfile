@@ -15,7 +15,7 @@ pipeline {
                     PROJECT_VERSION_PREFIX='1.0.'
                     PROJECT_VERSION=$PROJECT_VERSION_PREFIX$BUILD_NUMBER
                     mvn versions:set -DnewVersion=$PROJECT_VERSION
-                    mvn clean install -DskipTests
+                    mvn clean install -DskipTests -P dev
                 '''
             }
         }
@@ -23,7 +23,7 @@ pipeline {
         stage('Unit Tests') {
             steps {
                 sh '''
-                    mvn test
+                    mvn test -P test
                 '''
             }
         }
@@ -46,9 +46,6 @@ pipeline {
         stage('Deploy Production') {
             steps {
                 sh '''
-                    #./main.sh deploy elk-stack && \
-                    #./main.sh deploy ecommerce && \
-                    #./main.sh deploy coin-agent
 					echo 'TODO'
                 '''
             }
