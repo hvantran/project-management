@@ -1,18 +1,21 @@
 [submodule "parent-pom"]
 	path = parent-pom
-	url = https://github.com/hvantran/parent-pom
+	url = git@github.com-hvantran:hvantran/parent-pom.git
 [submodule "deployment"]
 	path = deployment
-	url = https://github.com/hvantran/deployment
+	url = git@github.com-hvantran:hvantran/deployment.git
 [submodule "ee-environment"]
 	path = ee-environment
-	url = https://github.com/hvantran/ee-environment
+	url = git@github.com-hvantran:hvantran/ee-environment.git
 [submodule "base-platform"]
 	path = base-platform
-	url = https://github.com/hvantran/base-platform
+	url = git@github.com-hvantran:hvantran/base-platform.git
 [submodule "account-platform"]
 	path = account-platform
-	url = https://github.com/hvantran/account-platform
+	url = git@github.com-hvantran:hvantran/account-platform.git
 [submodule "e-commerce"]
 	path = e-commerce
-	url = https://github.com/hvantran/e-commerce
+	url = git@github.com-hvantran:hvantran/e-commerce.git
+[submodule "services/template-management-app"]
+	path = services/template-management-app
+	url = git@github.com-hvantran:hvantran/template-management-app.git
