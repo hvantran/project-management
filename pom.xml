@@ -24,5 +24,6 @@
         <module>services/ecommerce-stats-app</module>
         <module>services/external-endpoint-collector</module>
         <module>services/template-management-app</module>
+        <module>base-platform/action-management-app</module>
     </modules>
 </project>
