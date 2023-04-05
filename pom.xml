@@ -25,5 +25,6 @@
         <module>services/external-endpoint-collector</module>
         <module>services/template-management-app</module>
         <module>base-platform/action-management-app</module>
+        <module>base-platform/action-management-ui</module>
     </modules>
 </project>
