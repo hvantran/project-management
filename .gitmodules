@@ -25,3 +25,6 @@
 [submodule "services/ecommerce-stats-app"]
 	path = services/ecommerce-stats-app
 	url = git@github.com-hvantran:hvantran/ecommerce-stats-app.git
+[submodule "services/action-manager-app"]
+	path = services/action-manager-app
+	url = git@github.com-hvantran:hvantran/action-manager-app.git
