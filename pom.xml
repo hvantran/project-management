@@ -21,11 +21,13 @@
         <module>account-platform</module>
         <module>base-platform/common-apps/system-health-statistics</module>
         <module>base-platform/common-apps/spring-cloud-gateway-app</module>
+
         <module>services/ecommerce-stats-app</module>
-        <module>services/external-endpoint-collector</module>
-        <module>services/template-management-app</module>
-        <module>base-platform/action-management-app</module>
-        <module>base-platform/action-management-ui</module>
-        <module>base-platform/external-endpoint-collector-ui</module>
+        <module>services/template-management-app/template-manager-backend</module>
+        <module>services/template-management-app/template-manager-ui</module>
+        <module>services/action-manager-app/action-manager-backend</module>
+        <module>services/action-manager-app/action-manager-ui</module>
+        <module>services/external-endpoint-collector/endpoint-collector-backend</module>
+        <module>services/external-endpoint-collector/endpoint-collector-ui</module>
     </modules>
 </project>
