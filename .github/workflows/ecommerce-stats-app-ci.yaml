@@ -83,5 +83,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
+          context: ./{SERVICE_PATH}}/target
+          file: ./services/ecommerce-stats-app/target/classes/Dockerfile
           push: true
           tags: tranvanhoa2810/ecommerce-stats-app:1.0.0-SNAPSHOT
