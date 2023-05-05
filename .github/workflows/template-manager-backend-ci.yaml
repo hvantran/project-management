@@ -59,7 +59,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Unit-Test-Results
-          path: "template-manager-backend/**/surefire-reports/*.xml"
+          path: "services/template-management-app/template-manager-backend/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
   Deploy:
