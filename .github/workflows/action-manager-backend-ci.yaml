@@ -87,7 +87,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./services/action-manager-app/target/
+          context: ./services/action-manager-app/action-manager-backend/target/
           file: ./classes/Dockerfile
           push: true
           tags: tranvanhoa2810/action-manager-backend:1.0.0-SNAPSHOT
