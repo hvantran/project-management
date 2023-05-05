@@ -4,17 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "services/ecommerce-stats-app/**"
-      - "base-platform/**"
-      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/ecommerce-stats-app-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
-      - "services/ecommerce-stats-app/**"
-      - "parent-pom/**"
-      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/ecommerce-stats-app-ci.yaml"
       

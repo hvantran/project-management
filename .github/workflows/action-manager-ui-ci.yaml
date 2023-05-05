@@ -4,17 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "services/action-manager-app/action-manager-ui/**"
-      - "base-platform/**"
-      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/action-manager-ui-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
-      - "services/action-manager-app/action-manager-ui/**"
-      - "parent-pom/**"
-      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/action-manager-ui-ci.yaml"
       
@@ -83,5 +77,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
+          context: ./{SERVICE_PATH}}
+          file: ./services/action-manager-app/action-manager-ui/Dockerfile
           push: true
           tags: tranvanhoa2810/action-manager-ui:1.0.0-SNAPSHOT

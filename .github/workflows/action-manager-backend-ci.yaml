@@ -4,17 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "services/action-manager-app/action-manager-backend/**"
-      - "base-platform/**"
-      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/action-manager-backend-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
-      - "services/action-manager-app/action-manager-backend/**"
-      - "parent-pom/**"
-      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/action-manager-backend-ci.yaml"
       
