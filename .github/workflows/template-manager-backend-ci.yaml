@@ -57,6 +57,7 @@ jobs:
         run: mvn test -Dmaven.test.failure.ignore=true -P test -f services/template-management-app/template-manager-backend
       - name: Unit test results
         uses: dorny/test-reporter@v1
+        if: failure()
         with:
           name: Unit-Test-Results
           path: "services/template-management-app/template-manager-backend/**/surefire-reports/*.xml"
