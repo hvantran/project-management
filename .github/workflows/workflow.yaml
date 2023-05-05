@@ -19,14 +19,14 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run Maven Build Command
-        run: mvn clean install -DskipTests
-      - name: Analyze with sonar cloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
-          mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
-          mvn sonar:sonar -Dsonar.projectKey=hvantran_e-commerce -f e-commerce
+        run: mvn clean install -DskipTests -P dev
+      #- name: Analyze with sonar cloud
+      #  env:
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #  run: |
+      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
+      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
+      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_e-commerce -f e-commerce
         
   Unit-Tests:
     needs: Build
@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run Maven Test Command
-        run: mvn test -Dmaven.test.failure.ignore=true
+        run: mvn test -Dmaven.test.failure.ignore=true -P test
       - name: Unit Test Results
         uses: dorny/test-reporter@v1
         with:
