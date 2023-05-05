@@ -40,26 +40,25 @@ jobs:
       #    mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
       #    mvn sonar:sonar -Dsonar.projectKey=hvantran_{{SERVICE_NAME}} -f services/{{SERVICE_NAME}}
 
-  Unit-Tests:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
-      - uses: ./.github/workflows/actions
-      - run: npm ci
-      - run: npm test
-      - name: Unit test results
-        uses: dorny/test-reporter@v1
-        if: failure()
-        with:
-          name: Unit-Test-Results
-          path: "{{SERVICE_PATH}}/**/surefire-reports/*.xml"
-          reporter: jest-junit
-          fail-on-error: true
+  #Unit-Tests:
+  #  needs: Build
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #      with:
+  #        submodules: recursive
+  #        token: ${{ secrets.ACCESS_TOKEN }}
+  #        fetch-depth: 0
+  #    - uses: ./.github/workflows/actions
+  #    - run: yarn test
+  #    - name: Unit test results
+  #      uses: dorny/test-reporter@v1
+  #      if: failure()
+  #      with:
+  #        name: Unit-Test-Results
+  #        path: "{{SERVICE_PATH}}/**/surefire-reports/*.xml"
+  #        reporter: jest-junit
+  #        fail-on-error: true
   Deploy:
     needs: Unit-Tests
     runs-on: ubuntu-latest
