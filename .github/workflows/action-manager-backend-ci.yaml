@@ -84,8 +84,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: tranvanhoa2810/action-manager-backend:1.0.0-SNAPSHOT
+      #- name: Build and push
+      #  uses: docker/build-push-action@v4
+      #  with:
+      #    push: true
+      #    tags: tranvanhoa2810/action-manager-backend:1.0.0-SNAPSHOT
+      
+      - name: Run maven deploy
+        run: mvn deploy
