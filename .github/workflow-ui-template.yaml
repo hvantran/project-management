@@ -1,5 +1,8 @@
 name: {{SERVICE_NAME}} service ci
 
+env:
+   CI: false
+
 on:
   push:
     branches: [ "main" ]

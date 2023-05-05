@@ -1,5 +1,8 @@
 name: action-manager-ui service ci
 
+env:
+   CI: false
+
 on:
   push:
     branches: [ "main" ]
