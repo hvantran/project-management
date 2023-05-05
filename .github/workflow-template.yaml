@@ -4,17 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "{{SERVICE_PATH}}/**"
-      - "base-platform/**"
-      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
-      - "{{SERVICE_PATH}}/**"
-      - "parent-pom/**"
-      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
       

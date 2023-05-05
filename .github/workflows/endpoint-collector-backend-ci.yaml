@@ -4,17 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "services/external-endpoint-collector/endpoint-collector-backend/**"
-      - "base-platform/**"
-      - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
-      - "services/external-endpoint-collector/endpoint-collector-backend/**"
-      - "parent-pom/**"
-      - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
       
