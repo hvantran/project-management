@@ -77,7 +77,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./{SERVICE_PATH}}
+          context: ./services/template-management-app/template-manager-ui
           file: ./services/template-management-app/template-manager-ui/Dockerfile
           push: true
           tags: tranvanhoa2810/template-manager-ui:1.0.0-SNAPSHOT
