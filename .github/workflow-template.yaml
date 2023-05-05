@@ -77,7 +77,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./{SERVICE_PATH}}/target
+          context: ./{{SERVICE_PATH}}/target
           file: ./{{SERVICE_PATH}}/target/classes/Dockerfile
           push: true
           tags: tranvanhoa2810/{{SERVICE_NAME}}:1.0.0-SNAPSHOT
