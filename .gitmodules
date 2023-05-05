@@ -1,30 +1,30 @@
 [submodule "parent-pom"]
 	path = parent-pom
-	url = git@github.com-hvantran:hvantran/parent-pom.git
+	url = git@github.com:hvantran/parent-pom.git
 [submodule "deployment"]
 	path = deployment
-	url = git@github.com-hvantran:hvantran/deployment.git
+	url = git@github.com:hvantran/deployment.git
 [submodule "ee-environment"]
 	path = ee-environment
-	url = git@github.com-hvantran:hvantran/ee-environment.git
+	url = git@github.com:hvantran/ee-environment.git
 [submodule "base-platform"]
 	path = base-platform
-	url = git@github.com-hvantran:hvantran/base-platform.git
+	url = git@github.com:hvantran/base-platform.git
 [submodule "account-platform"]
 	path = account-platform
-	url = git@github.com-hvantran:hvantran/account-platform.git
+	url = git@github.com:hvantran/account-platform.git
 [submodule "e-commerce"]
 	path = services/ecommerce-stats-app
-	url = git@github.com-hvantran:hvantran/e-commerce.git
+	url = git@github.com:hvantran/e-commerce.git
 [submodule "services/template-management-app"]
 	path = services/template-management-app
-	url = git@github.com-hvantran:hvantran/template-management-app.git
+	url = git@github.com:hvantran/template-management-app.git
 [submodule "services/external-endpoint-collector"]
 	path = services/external-endpoint-collector
-	url = git@github.com-hvantran:hvantran/external-endpoint-collector.git
+	url = git@github.com:hvantran/external-endpoint-collector.git
 [submodule "services/ecommerce-stats-app"]
 	path = services/ecommerce-stats-app
-	url = git@github.com-hvantran:hvantran/ecommerce-stats-app.git
+	url = git@github.com:hvantran/ecommerce-stats-app.git
 [submodule "services/action-manager-app"]
 	path = services/action-manager-app
-	url = git@github.com-hvantran:hvantran/action-manager-app.git
+	url = git@github.com:hvantran/action-manager-app.git
