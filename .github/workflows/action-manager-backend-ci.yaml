@@ -1,22 +1,22 @@
-name: {{SERVICE_NAME}} service ci
+name: action-manager-backend service ci
 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - "{{SERVICE_PATH}}/**"
+      - "services/action-manager-app/action-manager-backend/**"
       - "base-platform/**"
       - "parent-pom/**"
       - ".github/workflows/actions/action.yaml"
-      - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
+      - ".github/workflows/action-manager-backend-ci.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
-      - "{{SERVICE_PATH}}/**"
+      - "services/action-manager-app/action-manager-backend/**"
       - "parent-pom/**"
       - "base-platform/**"
       - ".github/workflows/actions/action.yaml"
-      - ".github/workflows/{{SERVICE_NAME}}-ci.yaml"
+      - ".github/workflows/action-manager-backend-ci.yaml"
       
   workflow_dispatch:
 
@@ -34,14 +34,14 @@ jobs:
         run: |
           mvn clean install -DskipTests -P prod -f parent-pom &&
           mvn clean install -DskipTests -P prod -f base-platform &&
-          mvn clean install -DskipTests -P prod -f {{SERVICE_PATH}}
+          mvn clean install -DskipTests -P prod -f services/action-manager-app/action-manager-backend
       #- name: Analyze with sonar cloud
       #  env:
       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       #  run: |
       #    mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
       #    mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
-      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_{{SERVICE_NAME}} -f services/{{SERVICE_NAME}}
+      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_action-manager-backend -f services/action-manager-backend
 
   Unit-Tests:
     needs: Build
@@ -54,12 +54,12 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run maven test
-        run: mvn test -Dmaven.test.failure.ignore=true -P test -f {{SERVICE_PATH}}
+        run: mvn test -Dmaven.test.failure.ignore=true -P test -f services/action-manager-app/action-manager-backend
       - name: Unit test results
         uses: dorny/test-reporter@v1
         with:
           name: Unit-Test-Results
-          path: "{{SERVICE_NAME}}/**/surefire-reports/*.xml"
+          path: "action-manager-backend/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
   Deploy:
@@ -73,7 +73,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run maven package
-        run: mvn clean package -DskipTests -P prod -f {{SERVICE_PATH}}
+        run: mvn clean package -DskipTests -P prod -f services/action-manager-app/action-manager-backend
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -83,4 +83,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: tranvanhoa2810/{{SERVICE_NAME}}:1.0.0-SNAPSHOT
+          tags: tranvanhoa2810/action-manager-backend:1.0.0-SNAPSHOT

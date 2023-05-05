@@ -1,0 +1,93 @@
+name: template-management-app service ci
+
+env:
+  REGISTRY: ghcr.io
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "template-management-app/**"
+      - "base-platform/**"
+      - "parent-pom/**"
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/template-management-app-ci.yaml"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "template-management-app/**"
+      - "parent-pom/**"
+      - "base-platform/**"
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/template-management-app-ci.yaml"
+      
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven build
+        run: |
+          mvn clean install -DskipTests -f parent-pom &&
+          mvn clean install -DskipTests -f base-platform &&
+          mvn clean install -DskipTests -f template-management-app
+      - name: Analyze with sonar cloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_template-management-app -f template-management-app
+
+  Unit-Tests:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven test
+        run: mvn test -Dmaven.test.failure.ignore=true -f template-management-app
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        with:
+          name: Unit-Test-Results
+          path: "template-management-app/**/surefire-reports/*.xml"
+          reporter: java-junit
+          fail-on-error: true
+  Deploy:
+    needs: Unit-Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven package
+        run: mvn clean package -DskipTests -f template-management-app
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          context: ./template-management-app
+          push: true
+          tags: ghcr.io/hvantran/template-management-app:latest
