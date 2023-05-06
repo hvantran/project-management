@@ -1,4 +1,4 @@
-name: Send submodule updates to parent repo
+name: send-submodule-updates-to-parent-repo-ci
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  update:
+  Update:
     runs-on: ubuntu-latest
 
     steps:
