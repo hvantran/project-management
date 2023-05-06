@@ -48,7 +48,10 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/actions
       - name: Run maven test
-        run: mvn test -Dmaven.test.failure.ignore=true -P test -f {{SERVICE_PATH}}
+        run: |
+          mvn clean install -DskipTests -P prod -f parent-pom && 
+          mvn clean install -DskipTests -P prod -f base-platform && 
+          mvn test -Dmaven.test.failure.ignore=true -P test -f {{SERVICE_PATH}}
       - name: Unit test results
         uses: dorny/test-reporter@v1
         if: failure()
