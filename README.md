@@ -18,4 +18,3 @@ My project collection
 # Notify changes to parent tasks
 
 [![[ecommerce-stats-app notify](https://github.com/hvantran/ecommerce-stats-app/actions/workflows/notify-parent-ci.yaml/badge.svg)](https://github.com/hvantran/ecommerce-stats-app/actions/workflows/notify-parent-ci.yaml)
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
