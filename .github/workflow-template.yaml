@@ -86,4 +86,4 @@ jobs:
           context: ./{{SERVICE_PATH}}/target
           file: ./{{SERVICE_PATH}}/target/classes/Dockerfile
           push: true
-          tags: tranvanhoa2810/{{SERVICE_NAME}}:1.0.${{github.run_number}}
+          tags: tranvanhoa2810/{{SERVICE_NAME}}:latest
