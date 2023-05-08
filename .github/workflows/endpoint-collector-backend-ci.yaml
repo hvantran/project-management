@@ -86,4 +86,4 @@ jobs:
           context: ./services/external-endpoint-collector/endpoint-collector-backend/target
           file: ./services/external-endpoint-collector/endpoint-collector-backend/target/classes/Dockerfile
           push: true
-          tags: tranvanhoa2810/endpoint-collector-backend:1.0.${{github.run_number}}
+          tags: tranvanhoa2810/endpoint-collector-backend:latest
