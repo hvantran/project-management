@@ -82,4 +82,4 @@ jobs:
           context: ./services/template-management-app/template-manager-ui
           file: ./services/template-management-app/template-manager-ui/Dockerfile
           push: true
-          tags: tranvanhoa2810/template-manager-ui:1.0.0-SNAPSHOT
+          tags: tranvanhoa2810/template-manager-ui:1.0.${{github.run_number}}

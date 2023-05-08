@@ -82,4 +82,4 @@ jobs:
           context: ./services/action-manager-app/action-manager-ui
           file: ./services/action-manager-app/action-manager-ui/Dockerfile
           push: true
-          tags: tranvanhoa2810/action-manager-ui:1.0.0-SNAPSHOT
+          tags: tranvanhoa2810/action-manager-ui:1.0.${{github.run_number}}
