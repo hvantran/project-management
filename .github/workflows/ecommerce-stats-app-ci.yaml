@@ -75,6 +75,10 @@ jobs:
           mvn clean install -DskipTests -P prod -f parent-pom && 
           mvn clean install -DskipTests -P prod -f base-platform && 
           mvn clean install -DskipTests -P prod -f services/ecommerce-stats-app
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ecommerce-stats-app
+          path: services/ecommerce-stats-app/**/*.jar
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
