@@ -26,9 +26,9 @@ jobs:
       - uses: ./.github/workflows/actions
       - name: Run maven build
         run: |
-          mvn clean install -DskipTests -P prod -f parent-pom &&
-          mvn clean install -DskipTests -P prod -f base-platform &&
-          mvn clean install -DskipTests -P prod -f services/template-management-app/template-manager-backend
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/template-management-app/template-manager-backend
       #- name: Analyze with sonar cloud
       #  env:
       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -72,9 +72,9 @@ jobs:
       - uses: ./.github/workflows/actions
       - name: Run maven package
         run: |
-          mvn clean install -DskipTests -P prod -f parent-pom && 
-          mvn clean install -DskipTests -P prod -f base-platform && 
-          mvn clean install -DskipTests -P prod -f services/template-management-app/template-manager-backend
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/template-management-app/template-manager-backend
       - uses: actions/upload-artifact@v3
         with:
           name: template-manager-backend
