@@ -1,15 +1,19 @@
 name: assigned-issues-are-in-progress
+
 on:
   issues:
-    types:
-      - assigned
+    types: [assigned]
+
 jobs:
-  move-assigned-card:
+  move-to-in-progress:
     runs-on: ubuntu-latest
     name: Move to In Progress Column
     steps:
-      - uses: alex-page/github-project-automation-plus@v0.8.3
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Move to In Progress
+        uses: ./
         with:
-          project: Project Management
-          column: In Progress
-          repo-token: ${{ secrets.ACCESS_TOKEN }}
+          access-token: "${{ secrets.ACCESS_TOKEN }}"
+          project-name: "Project Management"
+          target-column: "In Progress"
