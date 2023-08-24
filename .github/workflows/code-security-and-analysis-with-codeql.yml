@@ -9,7 +9,9 @@
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.
 #
-name: "code-security-and-analysis-with-codeql"
+name: code-security-and-analysis-with-codeql
+env:
+   CI: false
 
 on:
   push:
