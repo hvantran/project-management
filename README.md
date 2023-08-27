@@ -41,9 +41,12 @@ The **LoggerMonitor** is created to adapt these common cases.
 public @interface LoggingMonitor {
 
     /**
-     * The summary of the method. It supports the display parameters of the execution method with ${argument<index>} syntax
+     * The summary of the method.
+     * It supports the display parameters of the execution method and also supports getting the property of the object by using getter methods.
+     * Syntax: {argument<index>[.<getter method name>()]}
      * Example:
-     * "Hello ${argument0}" on method with the first argument is Nick. The result is "Hello Nick"
+     * "Hello {argument0}" on method with the first argument is Nick. The result is "Hello Nick"
+     * "Hello {argument0.getMessage()}" on method with the first argument is User("Nick"). The result is "Hello Nick"
      * @return
      */
     String description() default "";
@@ -54,8 +57,14 @@ public @interface LoggingMonitor {
 ```
 
     @Override
-    @LoggingMonitor(description = "Archive action by id: ${argument0}")
+    @LoggingMonitor(description = "Archive action by id: {argument0}")
     public void archive(String actionId) {
+        <code here>
+    }
+
+    @Override
+    @LoggingMonitor(description = "Update action: {argument0.getActionName()}")
+    public void update(ActionDefinition actionDefinitionVO) {
         <code here>
     }
 ```
