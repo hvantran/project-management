@@ -30,15 +30,18 @@
 
 The first idea of **action manager service** comes from my requirements. I want able to do jobs inside actions with Java programming language.
 
-The jobs can able to run immediately without any compilation process, and it also supports schedule and one-time jobs.
+The jobs can able to run immediately without any compilation process, and it also supports scheduled and one-time jobs.
 
 That is the reason why the action manager was born
 
 ### 1.3 CI/CD processes
+<TBD>
 
 ### 1.4 User cases
 
 #### 1.4.1 Actions
+
+![image](https://github.com/hvantran/project-management/assets/17746024/f09ab4ff-6acf-4055-8643-302545607b8d)
 
 ##### a. Create actions
 
@@ -61,6 +64,8 @@ That is the reason why the action manager was born
 ##### j. Add new jobs to an existing action
 
 ### 1.3.2 Jobs
+
+![image](https://github.com/hvantran/project-management/assets/17746024/e8963478-1da0-4eda-bf40-f635ecb6fd93)
 
 ##### a. Create schedule/one-time jobs
 
