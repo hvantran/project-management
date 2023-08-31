@@ -1,28 +1,73 @@
 # Project-management
 
-My project collection
-
+## CI Quality gateway
+### Project CI
 [![project man](https://github.com/hvantran/project-management/actions/workflows/workflow.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/workflow.yaml)
-
 [![action-manager-backend](https://github.com/hvantran/project-management/actions/workflows/action-manager-backend-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/action-manager-backend-ci.yaml)
 [![action-manager-ui](https://github.com/hvantran/project-management/actions/workflows/action-manager-ui-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/action-manager-ui-ci.yaml)
-
 [![ecommerce-stats-app](https://github.com/hvantran/project-management/actions/workflows/ecommerce-stats-app-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/ecommerce-stats-app-ci.yaml)
-
 [![endpoint-collector-backend](https://github.com/hvantran/project-management/actions/workflows/endpoint-collector-backend-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/endpoint-collector-backend-ci.yaml)
 [![endpoint-collector-ui](https://github.com/hvantran/project-management/actions/workflows/endpoint-collector-ui-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/endpoint-collector-ui-ci.yaml)
-
 [![template-manager-backend](https://github.com/hvantran/project-management/actions/workflows/template-manager-backend-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/template-manager-backend-ci.yaml)
 [![template-manager-ui](https://github.com/hvantran/project-management/actions/workflows/template-manager-ui-ci.yaml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/template-manager-ui-ci.yaml)
-
-# Notify changes to parent tasks
-
 [![[ecommerce-stats-app notify](https://github.com/hvantran/ecommerce-stats-app/actions/workflows/notify-parent-ci.yaml/badge.svg)](https://github.com/hvantran/ecommerce-stats-app/actions/workflows/notify-parent-ci.yaml)
-
 [![action-manager-app notify](https://github.com/hvantran/template-management-app/actions/workflows/notify-parent-ci.yaml/badge.svg)](https://github.com/hvantran/template-management-app/actions/workflows/notify-parent-ci.yaml)
-
+### Code quality CI
+[![code quality with codeql](https://github.com/hvantran/project-management/actions/workflows/code-security-and-analysis-with-codeql.yml/badge.svg)](https://github.com/hvantran/project-management/actions/workflows/code-security-and-analysis-with-codeql.yml)
 # Architecture
 <TBD>
+
+# User guide
+
+## 1. Action Manager
+
+### 1.1 Technical architechture
+
+### 1.2 Overview
+
+### 1.3 User cases
+
+#### 1.3.1 Actions
+
+##### a. Create actions
+
+##### b. Archive actions
+
+##### c. Restore actions
+
+##### d. Export actions
+
+##### e. Import actions
+
+##### f. Delete actions
+
+##### g. View actions
+
+##### h. Set farvorite actions
+
+##### i. View action details
+
+##### j. Add new jobs to an existing action
+
+### 1.3.2 Jobs
+
+##### a. Create schedule/one-time jobs
+
+##### b. Update jobs
+
+##### c. Delete jobs
+
+##### d. Dry run jobs
+
+##### e. Pause jobs
+
+##### f. Resume jobs
+
+##### g. View jobs
+
+##### h. View job details
+
+
 
 # Technical implementation notes
   
@@ -69,5 +114,6 @@ public @interface LoggingMonitor {
     }
 ```
 
+## 2. Metric m
 
 
