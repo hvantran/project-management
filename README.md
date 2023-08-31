@@ -43,45 +43,9 @@ That is the reason why the action manager was born
 
 ![image](https://github.com/hvantran/project-management/assets/17746024/f09ab4ff-6acf-4055-8643-302545607b8d)
 
-##### a. Create actions
-
-##### b. Archive actions
-
-##### c. Restore actions
-
-##### d. Export actions
-
-##### e. Import actions
-
-##### f. Delete actions
-
-##### g. View actions
-
-##### h. Set farvorite actions
-
-##### i. View action details
-
-##### j. Add new jobs to an existing action
-
 ### 1.3.2 Jobs
 
 ![image](https://github.com/hvantran/project-management/assets/17746024/e8963478-1da0-4eda-bf40-f635ecb6fd93)
-
-##### a. Create schedule/one-time jobs
-
-##### b. Update jobs
-
-##### c. Delete jobs
-
-##### d. Dry run jobs
-
-##### e. Pause jobs
-
-##### f. Resume jobs
-
-##### g. View jobs
-
-##### h. View job details
 
 
 
