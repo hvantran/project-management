@@ -22,12 +22,23 @@
 ## 1. Action Manager
 
 ### 1.1 Technical architechture
+![image](https://github.com/hvantran/project-management/assets/17746024/00fac8f4-3275-4a13-8573-b51b8e8c0f2d)
+
+
 
 ### 1.2 Overview
 
-### 1.3 User cases
+The first idea of **action manager service** comes from my requirements. I want able to do jobs inside actions with Java programming language.
 
-#### 1.3.1 Actions
+The jobs can able to run immediately without any compilation process, and it also supports schedule and one-time jobs.
+
+That is the reason why the action manager was born
+
+### 1.3 CI/CD processes
+
+### 1.4 User cases
+
+#### 1.4.1 Actions
 
 ##### a. Create actions
 
