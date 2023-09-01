@@ -27,7 +27,8 @@ jobs:
       - name: Run maven build
         run: |
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&&&
+          mvn clean -f services/action-manager-app/action-manager-backend dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/action-manager-app/action-manager-backend
       #- name: Analyze with sonar cloud
       #  env:
