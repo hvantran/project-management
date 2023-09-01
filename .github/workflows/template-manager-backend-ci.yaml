@@ -27,7 +27,13 @@ jobs:
       - name: Run maven build
         run: |
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom &&
+          mvn clean -f base-platform dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean -f base-platform/common-apps/system-health-statistics dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/system-health-statistics &&
+          mvn clean -f base-platform/common-apps/springboot-common-app dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
+          mvn clean -f services/template-management-app/template-manager-backend dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/template-management-app/template-manager-backend
       #- name: Analyze with sonar cloud
       #  env:
