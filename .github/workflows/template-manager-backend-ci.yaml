@@ -56,7 +56,9 @@ jobs:
       - name: Run maven test
         run: |
           mvn clean install -DskipTests -P test -f parent-pom && 
-          mvn clean install -P test -f base-platform && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/system-health-statistics &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
           mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/template-management-app/template-manager-backend
       - name: Unit test results
         uses: dorny/test-reporter@v1
@@ -79,7 +81,9 @@ jobs:
       - name: Run maven package
         run: |
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/system-health-statistics &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/template-management-app/template-manager-backend
       - uses: actions/upload-artifact@v3
         with:
