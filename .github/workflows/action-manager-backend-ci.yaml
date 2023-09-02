@@ -1,8 +1,8 @@
 name: action-manager-backend service ci
 
 env:
-   CI: false
-   
+  CI: false
+
 on:
   push:
     branches: [ "main" ]
@@ -18,7 +18,54 @@ on:
   workflow_dispatch:
 
 jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven build
+        run: |
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom &&
+          mvn clean -f base-platform dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean -f base-platform/common-apps/system-health-statistics dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/system-health-statistics &&
+          mvn clean -f base-platform/common-apps/springboot-common-app dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
+          mvn clean -f services/action-manager-app/action-manager-backend dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/action-manager-app/action-manager-backend
+
+  Test:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven test
+        run: |
+          mvn clean install -DskipTests -P test -f parent-pom && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/system-health-statistics &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
+          mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/action-manager-app/action-manager-backend
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        if: failure()
+        with:
+          name: Unit-Test-Results
+          path: "services/action-manager-app/action-manager-backend/**/surefire-reports/*.xml"
+          reporter: java-junit
+          fail-on-error: true
   Sonar:
+    needs: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.3
@@ -29,10 +76,42 @@ jobs:
       - uses: ./.github/workflows/actions
       - name: Analyze with sonar cloud
         env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn clean install sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom &&
           mvn clean install -DskipTests sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform &&
           mvn clean install -DskipTests -f base-platform/common-apps/springboot-common-app &&
           mvn clean install -Ddockerfile.skip=true -DskipTests sonar:sonar -Dsonar.projectKey=hvantran_action-manager-app -f services/action-manager-app
-  
+  Deploy:
+    needs: Sonar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven package
+        run: |
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f parent-pom && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/system-health-statistics &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/action-manager-app/action-manager-backend
+      - uses: actions/upload-artifact@v3
+        with:
+          name: action-manager-backend
+          path: services/action-manager-app/action-manager-backend/**/*.jar
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/action-manager-app/action-manager-backend/target
+          file: ./services/action-manager-app/action-manager-backend/target/classes/Dockerfile
+          push: true
+          tags: tranvanhoa2810/action-manager-backend:latest
