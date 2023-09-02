@@ -35,15 +35,8 @@ jobs:
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
           mvn clean -f services/action-manager-app/action-manager-backend dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/action-manager-app/action-manager-backend
-      - name: Analyze with sonar cloud
-        env:
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-         mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
-         mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
-         mvn sonar:sonar -Dsonar.projectKey=hvantran_action-manager-app -f services/action-manager-app
 
-  Unit-Tests:
+  Test:
     needs: Build
     runs-on: ubuntu-latest
     steps:
@@ -68,6 +61,23 @@ jobs:
           path: "services/action-manager-app/action-manager-backend/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
+  Sonar:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Analyze with sonar cloud
+        env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
+          mvn sonar:sonar -Dsonar.projectKey=hvantran_action-manager-app -f services/action-manager-app
   Deploy:
     needs: Unit-Tests
     runs-on: ubuntu-latest
