@@ -36,9 +36,9 @@ jobs:
           mvn clean -f services/action-manager-app/action-manager-backend dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/action-manager-app/action-manager-backend
       - name: Analyze with sonar cloud
-       env:
+        env:
          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-       run: |
+        run: |
          mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
          mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
          mvn sonar:sonar -Dsonar.projectKey=hvantran_action-manager-app -f services/action-manager-app
