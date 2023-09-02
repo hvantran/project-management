@@ -75,10 +75,10 @@ jobs:
         env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean deploy sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom &&
-          mvn clean deploy sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform &&
-          mvn clean deploy -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
-          mvn clean deploy sonar:sonar -Dsonar.projectKey=hvantran_action-manager-app -f services/action-manager-app
+          mvn clean install sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom &&
+          mvn clean install sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform/common-apps/springboot-common-app &&
+          mvn clean install sonar:sonar -Dsonar.projectKey=hvantran_action-manager-app -f services/action-manager-app
   Deploy:
     needs: Sonar
     runs-on: ubuntu-latest
