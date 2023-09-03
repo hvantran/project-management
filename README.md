@@ -17,16 +17,20 @@
 # Architecture
 <TBD>
 
-# User guide
+# Projects Overview
 
 ## 1. Action Manager
 
 ### 1.1 Technical architechture
-![image](https://github.com/hvantran/project-management/assets/17746024/00fac8f4-3275-4a13-8573-b51b8e8c0f2d)
+
+![image](https://github.com/hvantran/project-management/assets/17746024/eb5e4b1f-c936-40aa-920b-b281dd2c03d5)
+
+CI/CD
+
+![image](https://github.com/hvantran/project-management/assets/17746024/f7b687b4-aa69-4aec-bafd-c038f01b7482)
 
 
-
-### 1.2 Overview
+### 1.2 Introduction
 
 The first idea of **action manager service** comes from my requirements. I want able to do jobs inside actions with Java programming language.
 
@@ -34,18 +38,50 @@ The jobs can able to run immediately without any compilation process, and it als
 
 That is the reason why the action manager was born
 
-### 1.3 CI/CD processes
-<TBD>
+**Github repo URL**: https://github.com/hvantran/action-manager-app
 
-### 1.4 User cases
+### 1.3 User cases
 
-#### 1.4.1 Actions
+#### 1.3.1 Actions
 
 ![image](https://github.com/hvantran/project-management/assets/17746024/f09ab4ff-6acf-4055-8643-302545607b8d)
 
 ### 1.3.2 Jobs
 
 ![image](https://github.com/hvantran/project-management/assets/17746024/e8963478-1da0-4eda-bf40-f635ecb6fd93)
+
+
+## 2. Template Manager
+
+### 2.1 Technical architechture
+
+![image](https://github.com/hvantran/project-management/assets/17746024/9c910f52-0dfa-4105-95d9-e234fd851e44)
+
+
+CI/CD
+
+![image](https://github.com/hvantran/project-management/assets/17746024/7d189b11-1bd6-422f-8ffb-5b46474e485c)
+
+
+### 2.2 Introduction
+
+I work on tasks day by day, but there are some tasks repeatedly, and I don't want to spend too much time working on these tasks, it will reduce development time
+
+The first idea is **Template + Data = Output**
+
+**Github repo URL**: https://github.com/hvantran/template-management-app
+
+### 2.3 User cases
+
+#### 2.3.1 Templates
+
+![image](https://github.com/hvantran/project-management/assets/17746024/009b342a-c748-49b2-bdb0-0f1b1cc736a9)
+
+
+### 2.3.2 Reports
+
+![image](https://github.com/hvantran/project-management/assets/17746024/79d9674d-2db8-4653-ab30-bdc92c29d6a8)
+
 
 
 
