@@ -19,9 +19,6 @@
         <module>ee-environment</module>
         <module>base-platform</module>
         <module>account-platform</module>
-        <module>base-platform/common-apps/system-health-statistics</module>
-        <module>base-platform/common-apps/springboot-common-app</module>
-        <module>base-platform/common-apps/spring-cloud-gateway-app</module>
 
         <module>services/ecommerce-stats-app</module>
         <module>services/template-management-app/template-manager-backend</module>
