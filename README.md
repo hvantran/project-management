@@ -23,12 +23,7 @@
 
 ### 1.1 Technical architechture
 
-![image](https://github.com/hvantran/project-management/assets/17746024/eb5e4b1f-c936-40aa-920b-b281dd2c03d5)
-
-CI/CD
-
-![image](https://github.com/hvantran/project-management/assets/17746024/f7b687b4-aa69-4aec-bafd-c038f01b7482)
-
+![action-manager-architechture (2)](https://github.com/hvantran/project-management/assets/17746024/092bbd23-82e7-4cb7-8fe4-354100fe111c)
 
 ### 1.2 Introduction
 
@@ -55,13 +50,7 @@ That is the reason why the action manager was born
 
 ### 2.1 Technical architechture
 
-![image](https://github.com/hvantran/project-management/assets/17746024/9c910f52-0dfa-4105-95d9-e234fd851e44)
-
-
-CI/CD
-
-![image](https://github.com/hvantran/project-management/assets/17746024/7d189b11-1bd6-422f-8ffb-5b46474e485c)
-
+![template-manager-architechture](https://github.com/hvantran/project-management/assets/17746024/a992af47-db1b-4a32-80a0-3019cee083aa)
 
 ### 2.2 Introduction
 
