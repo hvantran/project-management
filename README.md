@@ -67,11 +67,8 @@
 <!-- TOC --><a name="12-introduction"></a>
 ### 1.2 Introduction
 
-The first idea of **action manager service** comes from my requirements. I want able to do jobs inside actions with Java programming language.
+I had the idea for an "Action Manager Service" to fulfill my own needs. Specifically, I wanted the ability to complete tasks using Java programming language and receive notifications or emails with the results. The service allows for tasks to be run immediately without the need for compilation and also supports the scheduling of both one-time and recurring jobs.
 
-The jobs can able to run immediately without any compilation process, and it also supports scheduled and one-time jobs.
-
-That is the reason why the action manager was born
 
 **Github repo URL**: https://github.com/hvantran/action-manager-app
 
