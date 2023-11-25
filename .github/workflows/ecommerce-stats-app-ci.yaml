@@ -105,4 +105,4 @@ jobs:
           context: ./services/ecommerce-stats-app/target
           file: ./services/ecommerce-stats-app/target/classes/Dockerfile
           push: true
-          tags: tranvanhoa2810/ecommerce-stats-app:latest
+          tags: tranvanhoa2810/ecommerce-stats-app:latest,tranvanhoa2810/ecommerce-stats-app:1.0.${{github.run_number}}
