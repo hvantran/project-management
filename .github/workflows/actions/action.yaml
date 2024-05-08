@@ -5,7 +5,6 @@ runs:
       with:
         java-version: '21'
         distribution: 'graalvm'
-        github-token: ${{ secrets.ACCESS_TOKEN }}
     - name: Cache SonarCloud packages
       uses: actions/cache@v3.3.1
       with:
