@@ -14,69 +14,69 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
-      
+  
   workflow_dispatch:
 
 jobs:
-#   Build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#         with:
-#           submodules: recursive
-#           token: ${{ secrets.ACCESS_TOKEN }}
-#           fetch-depth: 0
-#       - uses: ./.github/workflows/actions
-#       - name: Run maven build
-#         run: |
-#           mvn clean install -f parent-pom &&
-#           mvn clean -f base-platform dependency:tree &&
-#           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-#           mvn clean -f services/external-endpoint-collector/endpoint-collector-backend dependency:tree &&
-#           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend
-
-#   Test:
-#     needs: Build
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#         with:
-#           submodules: recursive
-#           token: ${{ secrets.ACCESS_TOKEN }}
-#           fetch-depth: 0
-#       - uses: ./.github/workflows/actions
-#       - name: Run maven test
-#         run: |
-#           mvn clean install -f parent-pom && 
-#           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-#           mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/external-endpoint-collector/endpoint-collector-backend
-#       - name: Unit test results
-#         uses: dorny/test-reporter@v1
-#         if: failure()
-#         with:
-#           name: Unit-Test-Results
-#           path: "services/external-endpoint-collector/endpoint-collector-backend/**/surefire-reports/*.xml"
-#           reporter: java-junit
-#           fail-on-error: true
-#   Sonar:
-#     needs: Test
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#         with:
-#           submodules: recursive
-#           token: ${{ secrets.ACCESS_TOKEN }}
-#           fetch-depth: 0
-#       - uses: ./.github/workflows/actions
-#       - name: Analyze with sonar cloud
-#         env:
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#         run: |
-#           mvn clean install -f parent-pom &&
-#           mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
-#           mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_external-endpoint-collector sonar:sonar -f services/external-endpoint-collector
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven build
+        run: |
+          mvn clean install -f parent-pom &&
+          mvn clean -f base-platform dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean -f services/external-endpoint-collector/endpoint-collector-backend dependency:tree &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend
+  
+  Test:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Run maven test
+        run: |
+          mvn clean install -f parent-pom && 
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
+          mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/external-endpoint-collector/endpoint-collector-backend
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        if: failure()
+        with:
+          name: Unit-Test-Results
+          path: "services/external-endpoint-collector/endpoint-collector-backend/**/surefire-reports/*.xml"
+          reporter: java-junit
+          fail-on-error: true
+  Sonar:
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: ./.github/workflows/actions
+      - name: Analyze with sonar cloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn clean install -f parent-pom &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_external-endpoint-collector sonar:sonar -f services/external-endpoint-collector
   Deploy:
-    # needs: Sonar
+    needs: Sonar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -102,17 +102,10 @@ jobs:
       - name: Set VERSION environment variable
         run: |
           echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-      - name: Docker Build-Tag-Push my-app
+      - name: Build and push
         run: |
           mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/external-endpoint-collector/endpoint-collector-backend spring-boot:build-image
           docker tag endpoint-collector-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:latest
           docker tag endpoint-collector-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:1.0.${{github.run_number}}
-      # - name: Build and push
-      #   uses:  docker/build-push-action@v5
-      #   with:
-      #     context: ./services/external-endpoint-collector/endpoint-collector-backend/target
-      #     # file: ./services/external-endpoint-collector/endpoint-collector-backend/target/classes/Dockerfile
-      #     push: true
-      #     tags: tranvanhoa2810/endpoint-collector-backend:latest,tranvanhoa2810/endpoint-collector-backend:1.0.${{github.run_number}}

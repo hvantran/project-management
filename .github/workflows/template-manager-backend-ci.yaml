@@ -99,10 +99,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set VERSION environment variable
+        run: |
+          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
       - name: Build and push
-        uses:  docker/build-push-action@v5
-        with:
-          context: ./services/template-management-app/template-manager-backend/target
-          file: ./services/template-management-app/template-manager-backend/target/classes/Dockerfile
-          push: true
-          tags: tranvanhoa2810/template-manager-backend:latest,tranvanhoa2810/template-manager-backend:1.0.${{github.run_number}}
+        run: |
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/template-management-app/template-manager-backend spring-boot:build-image
+          docker tag template-manager-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/template-manager-backend:latest
+          docker tag template-manager-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/template-manager-backend:1.0.${{github.run_number}}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/template-manager-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/template-manager-backend:1.0.${{github.run_number}}
