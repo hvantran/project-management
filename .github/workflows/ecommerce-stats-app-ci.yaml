@@ -105,7 +105,7 @@ jobs:
       - name: Build and push
         run: |
           mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/ecommerce-stats-app spring-boot:build-image
-          docker tag ecommerce-stats-app:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-stats-app:latest
-          docker tag ecommerce-stats-app:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-stats-app:1.0.${{github.run_number}}
+          docker tag e-commerce-stats:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-stats-app:latest
+          docker tag e-commerce-stats:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-stats-app:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-stats-app:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-stats-app:1.0.${{github.run_number}}
