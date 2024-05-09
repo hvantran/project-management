@@ -88,8 +88,8 @@ jobs:
       - name: Run maven package
         run: |
           mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/external-endpoint-collector/endpoint-collector-backend spring-boot:build-image
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
+          # mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend
       - uses: actions/upload-artifact@v4
         with:
           name: endpoint-collector-backend
@@ -99,10 +99,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        uses:  docker/build-push-action@v5
-        with:
-          context: ./services/external-endpoint-collector/endpoint-collector-backend/target
-          # file: ./services/external-endpoint-collector/endpoint-collector-backend/target/classes/Dockerfile
-          push: true
-          tags: tranvanhoa2810/endpoint-collector-backend:latest,tranvanhoa2810/endpoint-collector-backend:1.0.${{github.run_number}}
+      - name: Set VERSION environment variable
+        run: |
+          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      - name: Docker Build-Tag-Push my-app
+        run: |
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/external-endpoint-collector/endpoint-collector-backend spring-boot:build-image
+          docker tag endpoint-collector-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:latest
+          docker tag endpoint-collector-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:1.0.${{github.run_number}}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:1.0.${{github.run_number}}
+      # - name: Build and push
+      #   uses:  docker/build-push-action@v5
+      #   with:
+      #     context: ./services/external-endpoint-collector/endpoint-collector-backend/target
+      #     # file: ./services/external-endpoint-collector/endpoint-collector-backend/target/classes/Dockerfile
+      #     push: true
+      #     tags: tranvanhoa2810/endpoint-collector-backend:latest,tranvanhoa2810/endpoint-collector-backend:1.0.${{github.run_number}}
