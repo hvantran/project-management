@@ -89,8 +89,7 @@ jobs:
         run: |
           mvn clean install -f parent-pom && 
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend &&
-          mvn -Pnative spring-boot:build-image
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/external-endpoint-collector/endpoint-collector-backend spring-boot:build-image
       - uses: actions/upload-artifact@v4
         with:
           name: endpoint-collector-backend
