@@ -21,7 +21,7 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
   #  needs: Build
   #  runs-on: ubuntu-latest
   #  steps:
-  #    - uses: actions/checkout@v3
+  #    - uses: actions/checkout@v4
   #      with:
   #        submodules: recursive
   #        token: ${{ secrets.ACCESS_TOKEN }}
@@ -63,7 +63,7 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
@@ -72,12 +72,12 @@ jobs:
       - name: Run maven package
         run: mvn clean package -DskipTests -P prod -f {{SERVICE_PATH}}
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses:  docker/build-push-action@v5
         with:
           context: ./{{SERVICE_PATH}}
           file: ./{{SERVICE_PATH}}/Dockerfile
