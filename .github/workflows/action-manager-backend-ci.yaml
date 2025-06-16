@@ -58,6 +58,11 @@ jobs:
           path: "services/action-manager-app/action-manager-backend/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: services/action-manager-app/action-manager-backend/target/site/jacoco/
   Sonar:
     needs: Test
     runs-on: ubuntu-latest
