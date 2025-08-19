@@ -47,7 +47,11 @@
     + [1.1 Situation](#11-situation)
     + [1.2 Resolution](#12-resolution)
     + [1.3 Usage](#13-usage)
-  * [2. Metric m](#2-metric-m)
+  * [2. Metric Management](#2-metric-management)
+    + [2.1 Situation](#21-situation)
+    + [2.2 Resolution](#22-resolution)
+    + [2.3 Usage](#23-usage)
+      - [2.3.1 Kafka Metric Consumer](#231-kafka-metric-consumer)
 
 <!-- TOC --><a name="architecture"></a>
 # Architecture
@@ -171,5 +175,71 @@ public @interface LoggingMonitor {
 ```
 
 <!-- TOC --><a name="2-metric-m"></a>
-## 2. Metric m
+## 2. Metric Management
+
+### 2.1 Situation
+
+The application needs to collect and send metrics to various destinations for monitoring and analytics purposes. Different consumers may be needed for different use cases - logging for debugging, Kafka for real-time streaming, etc.
+
+### 2.2 Resolution
+
+The **MetricConsumer** system provides a pluggable architecture for processing metrics through different consumers:
+
+- **MetricConsumerHandler** interface defines the contract: `consume(String application, String category, String metricKey, Object metricValue, String unit)`
+- **@MetricConsumer** annotation marks classes as metric consumers
+- **LoggingMetricConsumer** outputs metrics to logs with structured logging
+- **KafkaMetricConsumer** sends metrics to Kafka topics for real-time processing
+
+### 2.3 Usage
+
+#### 2.3.1 Kafka Metric Consumer
+
+The KafkaMetricConsumer sends metrics to Apache Kafka topics in JSON format for real-time processing and analytics.
+
+**Basic Usage:**
+```java
+// Default configuration (localhost:9092, topic: "metrics")
+KafkaMetricConsumer kafkaConsumer = new KafkaMetricConsumer();
+
+// Custom configuration
+KafkaMetricConsumer kafkaConsumer = new KafkaMetricConsumer("kafka-broker:9092", "custom-metrics");
+
+// With configuration object
+KafkaMetricConfig config = new KafkaMetricConfig();
+config.setBootstrapServers("kafka-cluster:9092");
+config.setTopicName("application-metrics");
+config.setRetries(5);
+KafkaMetricConsumer kafkaConsumer = new KafkaMetricConsumer(config);
+```
+
+**Message Format:**
+The consumer sends JSON messages to Kafka with the following structure:
+```json
+{
+  "timestamp": 1692454800000,
+  "application": "action-manager",
+  "category": "performance",
+  "name": "cpu-usage",
+  "value": 75.5,
+  "unit": "percent",
+  "attributes": {
+    "host": "server1",
+    "region": "us-east-1"
+  }
+}
+```
+
+**Supported Metric Types:**
+- Simple values: String, Long, Integer, Double
+- SimpleValue objects
+- ComplexValue objects with tags and attributes
+- Collections of ComplexValue objects
+
+**Configuration Options:**
+- `bootstrapServers`: Kafka broker addresses (default: "localhost:9092")
+- `topicName`: Target topic name (default: "metrics")
+- `acks`: Acknowledgment level (default: "1")
+- `retries`: Number of retries (default: 3)
+- `batchSize`: Batch size for producer (default: 16384)
+- `lingerMs`: Linger time in milliseconds (default: 5)
 
