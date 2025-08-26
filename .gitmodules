@@ -30,4 +30,4 @@
 	url = git@github.com:hvantran/action-manager-app.git
 [submodule "services/spring-kafka-notifier"]
 	path = services/spring-kafka-notifier
-	url = git@github.com-hvantran:hvantran/spring-kafka-notifier.git
+	url = git@github.com:hvantran/spring-kafka-notifier.git
