@@ -9,13 +9,11 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/spring-kafka-notifier-ci.yaml"
-      - "services/spring-kafka-notifier/**"
   pull_request:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/spring-kafka-notifier-ci.yaml"
-      - "services/spring-kafka-notifier/**"
       
   workflow_dispatch:
 
@@ -51,10 +49,22 @@ jobs:
         run: |
           mvn clean install -f parent-pom && 
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean test -f services/spring-kafka-notifier
-
-  QualityCheck:
-    needs: [Build, Test]
+          mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/spring-kafka-notifier
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        if: failure()
+        with:
+          name: Unit-Test-Results
+          path: "services/spring-kafka-notifier/**/surefire-reports/*.xml"
+          reporter: java-junit
+          fail-on-error: true
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: services/spring-kafka-notifier/target/site/jacoco/
+  Sonar:
+    needs: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,18 +73,15 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           fetch-depth: 0
       - uses: ./.github/workflows/actions
-      - name: Run maven package and quality check with SonarCloud
+      - name: Analyze with sonar cloud
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean verify sonar:sonar -f services/spring-kafka-notifier
-
-  DockerBuild:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [Build, Test, QualityCheck]
+          mvn clean install -f parent-pom &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
+          mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_spring-kafka-notifier sonar:sonar -f services/spring-kafka-notifier
+  Deploy:
+    needs: Sonar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -83,15 +90,26 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           fetch-depth: 0
       - uses: ./.github/workflows/actions
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build and push Docker image
+      - name: Run maven package
         run: |
           mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean package -DskipTests -P prod -f services/spring-kafka-notifier &&
-          docker build -t hvantran/spring-kafka-notifier:latest services/spring-kafka-notifier/ &&
-          docker push hvantran/spring-kafka-notifier:latest
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spring-kafka-notifier
+          path: services/spring-kafka-notifier/**/*.jar
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set VERSION environment variable
+        run: |
+          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      - name: Build and push
+        run: |
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/spring-kafka-notifier spring-boot:build-image
+          docker tag spring-kafka-notifier:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-kafka-notifier:latest
+          docker tag spring-kafka-notifier:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-kafka-notifier:1.0.${{github.run_number}}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-kafka-notifier:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-kafka-notifier:1.0.${{github.run_number}}
