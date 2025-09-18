@@ -30,6 +30,6 @@
         <module>services/external-endpoint-collector/endpoint-collector-backend</module>
         <module>services/external-endpoint-collector/endpoint-collector-ui</module>
         <module>services/spring-kafka-notifier</module>
-        <module>services/flow-request-manager/flow-request-backend</module>
+        <!-- <module>services/flow-request-manager/flow-request-backend</module> -->
     </modules>
 </project>
