@@ -9,6 +9,12 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <!-- Sonar cloud configuration -->
+        <sonar.organization>hvantran</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
     <modules>
         <module>parent-pom</module>
         <module>deployment</module>
@@ -24,5 +30,6 @@
         <module>services/external-endpoint-collector/endpoint-collector-backend</module>
         <module>services/external-endpoint-collector/endpoint-collector-ui</module>
         <module>services/spring-kafka-notifier</module>
+        <module>services/flow-request-manager/flow-request-backend</module>
     </modules>
 </project>
