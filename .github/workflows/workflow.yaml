@@ -58,5 +58,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean install sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_parent-pom -f parent-pom &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_base-platform -f base-platform
+          mvn clean compile test-compile sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_project-management
