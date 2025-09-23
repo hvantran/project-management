@@ -14,7 +14,7 @@ This file documents the changes made during the Spring Boot upgrade from 3.2.0 t
 - **Spring Kafka Test**: Updated from `3.1.0` to `3.2.0`
 
 ### 3. Java Version Compatibility
-- **Changed**: `java.compile.version` from `21` to `17` (to match runtime environment)
+- **Changed**: `java.compile.version` from `17` to `21` (to match runtime environment)
 
 ### 4. Logging Dependencies
 - **Removed**: Explicit logback-core and logback-classic dependencies
@@ -24,7 +24,7 @@ This file documents the changes made during the Spring Boot upgrade from 3.2.0 t
 ## Verification
 
 A test Spring Boot application was created and successfully:
-- ✅ Compiles with Java 17
+- ✅ Compiles with Java 21
 - ✅ Packages as executable JAR
 - ✅ Runs successfully 
 - ✅ Reports Spring Boot version 3.5.5
