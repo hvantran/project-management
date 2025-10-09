@@ -3,6 +3,12 @@
 ## Overview
 This upgrade updates Spring Boot from version 3.2.0 to 3.5.5 along with all compatible dependency versions.
 
+## Implementation Status
+
+✅ **Changes Completed** - All code changes implemented in parent-pom/pom.xml
+✅ **Branch Created** - `copilot/upgrade-spring-boot-3.5.5` in parent-pom submodule (commit `4dc0461`)
+📋 **Next Step** - Push branch and create PR in parent-pom repository
+
 ## Changes Implemented
 
 ### Version Updates in parent-pom/pom.xml
@@ -34,11 +40,13 @@ All dependency versions have been validated using Maven:
 
 ## Files in This Upgrade
 
-1. **parent-pom/pom.xml** - Updated POM with all version changes
+1. **parent-pom/pom.xml** - Updated POM with all version changes (in branch `copilot/upgrade-spring-boot-3.5.5`)
 2. **parent-pom-updated.xml** - Backup copy of the updated POM file
 3. **parent-pom-upgrade.patch** - Patch file with all changes
 4. **SPRING_BOOT_UPGRADE.md** - Detailed upgrade documentation
 5. **UPGRADE_SUMMARY.md** - This summary file
+6. **PARENT_POM_PR_GUIDE.md** - Step-by-step guide for creating PR in parent-pom
+7. **DEPLOYMENT_INSTRUCTIONS.md** - Alternative deployment options
 
 ## Impact
 
@@ -49,13 +57,22 @@ This upgrade affects all Spring Boot applications that inherit from parent-pom:
 - template-manager-backend
 - endpoint-collector-backend
 
-## Next Steps
+## Next Steps - Creating the PR
 
-Since parent-pom is a git submodule, the changes need to be:
-1. Committed to the parent-pom repository
-2. Referenced in the main project-management repository
+A branch has been created in the parent-pom submodule with all changes ready:
 
-The patch file provided can be applied to the parent-pom repository.
+**Branch**: `copilot/upgrade-spring-boot-3.5.5`  
+**Commit**: `4dc0461` - "Upgrade Spring Boot to 3.5.5 with compatible dependencies"
+
+To create the PR in the parent-pom repository:
+
+1. Navigate to the parent-pom submodule: `cd parent-pom`
+2. Push the branch: `git push -u origin copilot/upgrade-spring-boot-3.5.5`
+3. Go to https://github.com/hvantran/parent-pom and create the PR
+
+**For detailed instructions, see PARENT_POM_PR_GUIDE.md**
+
+Alternative: You can still use the patch file approach described in DEPLOYMENT_INSTRUCTIONS.md.
 
 ## Backward Compatibility
 
