@@ -63,6 +63,10 @@ jobs:
         with:
           name: jacoco-report
           path: services/spring-kafka-notifier/target/site/jacoco/
+      - name: Jacoco Badge Generator
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: services/spring-kafka-notifier/target/site/jacoco/jacoco.csv
   Sonar:
     needs: Test
     runs-on: ubuntu-latest
