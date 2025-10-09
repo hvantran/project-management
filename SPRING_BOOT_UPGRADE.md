@@ -5,6 +5,9 @@ This document details the Spring Boot upgrade from version 3.2.0 to 3.5.5 in the
 ## Implementation Status
 
 ✅ **COMPLETED** - All changes have been implemented in the `parent-pom/pom.xml` file.
+✅ **BRANCH CREATED** - Branch `copilot/upgrade-spring-boot-3.5.5` created in parent-pom submodule with commit `4dc0461`
+
+**Next Step**: Push the branch and create a PR in the parent-pom repository (see PARENT_POM_PR_GUIDE.md)
 
 ## Changes Made
 
@@ -31,30 +34,30 @@ This document details the Spring Boot upgrade from version 3.2.0 to 3.5.5 in the
 
 The following files contain the Spring Boot upgrade changes:
 
-1. **parent-pom/pom.xml** - Main POM file with all dependency and version updates
+1. **parent-pom/pom.xml** - Main POM file with all dependency and version updates (in branch `copilot/upgrade-spring-boot-3.5.5`)
 2. **parent-pom-updated.xml** - Copy of the updated parent-pom/pom.xml for reference
 3. **parent-pom-upgrade.patch** - Patch file showing all changes made
+4. **PARENT_POM_PR_GUIDE.md** - Step-by-step guide for creating PR in parent-pom repository
 
-## How to Apply the Changes
+## Creating the Pull Request
 
-Since `parent-pom` is a git submodule pointing to a separate repository, the changes need to be committed to that repository. The patch file (`parent-pom-upgrade.patch`) can be applied to the parent-pom repository using:
+A branch has been created in the parent-pom submodule with all the changes:
+- **Branch**: `copilot/upgrade-spring-boot-3.5.5`
+- **Commit**: `4dc0461` - "Upgrade Spring Boot to 3.5.5 with compatible dependencies"
+
+**See PARENT_POM_PR_GUIDE.md for detailed instructions on how to push the branch and create the PR.**
+
+Quick steps:
 
 ```bash
 cd parent-pom
-git apply ../parent-pom-upgrade.patch
-git add pom.xml
-git commit -m "Upgrade Spring Boot to 3.5.5 with compatible dependencies"
-git push
+git push -u origin copilot/upgrade-spring-boot-3.5.5
+# Then create PR on GitHub web UI
 ```
 
-Then update the main repository to reference the new commit:
+For detailed instructions, see **PARENT_POM_PR_GUIDE.md**.
 
-```bash
-cd ..
-git add parent-pom
-git commit -m "Update parent-pom submodule to Spring Boot 3.5.5"
-git push
-```
+Alternative: You can still use the patch file approach described in DEPLOYMENT_INSTRUCTIONS.md.
 
 ## Verification
 
