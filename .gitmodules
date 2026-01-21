@@ -31,3 +31,6 @@
 [submodule "services/spring-kafka-notifier"]
 	path = services/spring-kafka-notifier
 	url = git@github.com:hvantran/spring-kafka-notifier.git
+[submodule "awesome-copilot"]
+	path = awesome-copilot
+	url = git@github.com:hvantran/awesome-copilot.git
