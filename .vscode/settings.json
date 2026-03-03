@@ -1,0 +1,6 @@
+{
+  "github.copilot.enable": {
+    "*": false
+  },
+  "java.configuration.updateBuildConfiguration": "interactive"
+}
