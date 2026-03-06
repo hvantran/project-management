@@ -17,7 +17,7 @@
 
     <modules>
         <module>parent-pom</module>
-        <module>deployment</module>
+        <module>deployment-new</module>
         <module>ee-environment</module>
         <module>base-platform</module>
         <module>account-platform</module>

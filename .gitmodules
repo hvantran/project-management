@@ -31,3 +31,6 @@
 [submodule "awesome-copilot"]
 	path = awesome-copilot
 	url = git@github.com:hvantran/awesome-copilot.git
+[submodule "deployment-new"]
+	path = deployment-new
+	url = git@github.com-hvantran:hvantran/deployment-new.git
