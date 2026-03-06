@@ -1,9 +1,6 @@
 [submodule "parent-pom"]
 	path = parent-pom
 	url = git@github.com:hvantran/parent-pom.git
-[submodule "deployment"]
-	path = deployment
-	url = git@github.com:hvantran/deployment.git
 [submodule "ee-environment"]
 	path = ee-environment
 	url = git@github.com:hvantran/ee-environment.git
