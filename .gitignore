@@ -28,3 +28,6 @@ hs_err_pid*
 
 # Copilot tracking files (may contain sensitive test data)
 .copilot-tracking/
+
+# Agent work files (may contain sensitive development data)
+.agent_work/
