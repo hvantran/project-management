@@ -40,7 +40,7 @@ jobs:
       sonar-project-key: "hvantran_external-endpoint-collector"
       docker-image-name: "endpoint-collector-backend"
       jacoco-enabled: false
-      build-native: false
+      build-native: true
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

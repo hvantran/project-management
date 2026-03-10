@@ -40,7 +40,7 @@ jobs:
       sonar-project-key: "hvantran_spring-kafka-notifier"
       docker-image-name: "spring-kafka-notifier"
       jacoco-enabled: true
-      build-native: false
+      build-native: true
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
