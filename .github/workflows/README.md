@@ -101,6 +101,7 @@ concurrency:
 permissions:
   contents: read
   pull-requests: write
+  checks: write
 
 jobs:
   ci:
@@ -140,6 +141,7 @@ concurrency:
 permissions:
   contents: read
   pull-requests: write
+  checks: write
 
 jobs:
   ci:
@@ -168,7 +170,7 @@ jobs:
 ## Key Features
 
 - **Concurrency Control**: Cancel outdated workflow runs automatically
-- **Explicit Permissions**: Minimal permissions (contents: read, pull-requests: write)
+- **Explicit Permissions**: Minimal permissions (contents: read, pull-requests: write, checks: write)
 - **Timeout Protection**: All jobs have timeout-minutes configured
 - **Optimized Checkout**: Uses shallow clones (fetch-depth: 1) except for Sonar
 - **Artifact Management**: Uploads build artifacts for debugging
