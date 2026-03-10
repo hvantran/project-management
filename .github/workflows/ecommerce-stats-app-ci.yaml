@@ -1,14 +1,12 @@
 name: ecommerce-stats-app service ci
 
-env:
-  CI: false
-
 on:
   push:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/ecommerce-stats-app-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
       - "services/ecommerce-stats-app/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -17,6 +15,7 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/ecommerce-stats-app-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
       - "services/ecommerce-stats-app/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -32,82 +31,20 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven build
-        run: |
-          mvn clean install -f parent-pom &&
-          mvn clean -f base-platform dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean -f services/ecommerce-stats-app dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/ecommerce-stats-app
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven test
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/ecommerce-stats-app
-      - name: Unit test results
-        uses: dorny/test-reporter@v1
-        if: failure()
-        with:
-          name: Unit-Test-Results
-          path: "services/ecommerce-stats-app/**/surefire-reports/*.xml"
-          reporter: java-junit
-          fail-on-error: true
-  sonar:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
-      - uses: ./.github/workflows/actions
-      - name: Analyze with sonar cloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn clean install -f parent-pom &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_ecommerce-stats-app sonar:sonar -f services/ecommerce-stats-app
-  deploy:
-    needs: sonar
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven package
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/ecommerce-stats-app
+  ci:
+    uses: ./.github/workflows/reusable-backend-service-ci.yaml
+    with:
+      service-name: "ecommerce-stats-app"
+      service-path: "services/ecommerce-stats-app"
+      sonar-project-key: "hvantran_ecommerce-stats-app"
+      docker-image-name: "ecommerce-stats-app"
+      jacoco-enabled: false
+      build-native: false
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: ecommerce-stats-app

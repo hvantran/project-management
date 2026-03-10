@@ -1,14 +1,12 @@
 name: endpoint-collector-backend service ci
 
-env:
-  CI: false
-
 on:
   push:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
       - "services/external-endpoint-collector/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -17,6 +15,7 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
       - "services/external-endpoint-collector/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -32,82 +31,20 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven build
-        run: |
-          mvn clean install -f parent-pom &&
-          mvn clean -f base-platform dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean -f services/external-endpoint-collector/endpoint-collector-backend dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend
-  
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven test
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/external-endpoint-collector/endpoint-collector-backend
-      - name: Unit test results
-        uses: dorny/test-reporter@v1
-        if: failure()
-        with:
-          name: Unit-Test-Results
-          path: "services/external-endpoint-collector/endpoint-collector-backend/**/surefire-reports/*.xml"
-          reporter: java-junit
-          fail-on-error: true
-  sonar:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
-      - uses: ./.github/workflows/actions
-      - name: Analyze with sonar cloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn clean install -f parent-pom &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_external-endpoint-collector sonar:sonar -f services/external-endpoint-collector
-  deploy:
-    needs: sonar
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven package
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
-          # mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend
+  ci:
+    uses: ./.github/workflows/reusable-backend-service-ci.yaml
+    with:
+      service-name: "endpoint-collector-backend"
+      service-path: "services/external-endpoint-collector/endpoint-collector-backend"
+      sonar-project-key: "hvantran_external-endpoint-collector"
+      docker-image-name: "endpoint-collector-backend"
+      jacoco-enabled: false
+      build-native: false
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: endpoint-collector-backend
