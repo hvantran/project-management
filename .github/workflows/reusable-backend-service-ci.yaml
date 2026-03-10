@@ -122,6 +122,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    # Only deploy on push to main, skip on PRs
+    if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -148,7 +150,7 @@ jobs:
       - name: Build and push (standard)
         if: ${{ !inputs.build-native }}
         run: |
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f ${{ inputs.service-path }}
+          mvn clean install -DskipTests -P prod -f ${{ inputs.service-path }}
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
@@ -156,7 +158,7 @@ jobs:
       - name: Build and push (native)
         if: inputs.build-native
         run: |
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f ${{ inputs.service-path }} spring-boot:build-image
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f ${{ inputs.service-path }} spring-boot:build-image -Dspring-boot.build-image.imageName=${{ inputs.docker-image-name }}:${{ env.VERSION }}
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest

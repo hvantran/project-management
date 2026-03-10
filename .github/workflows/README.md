@@ -195,7 +195,6 @@ All workflows set `CI: false` to avoid strict mode warnings during builds.
 **On Pull Requests:**
 1. **build** (20 min timeout): Build parent-pom, base-platform, and service
 2. **test** (25 min timeout): Run tests, generate coverage (optional), report results
-3. **deploy** (25 min timeout): Build Docker image, tag, and push to DockerHub
 
 **On Main Branch:**
 1. **build** (20 min timeout): Build parent-pom, base-platform, and service
@@ -203,9 +202,16 @@ All workflows set `CI: false` to avoid strict mode warnings during builds.
 3. **sonar** (20 min timeout): Run SonarCloud analysis and quality gate (runs in parallel with deploy)
 4. **deploy** (25 min timeout): Build Docker image, tag, and push to DockerHub (runs in parallel with sonar)
 
-> **Note**: Sonar is skipped on PRs to prevent PR decoration conflicts when workflows run in parent repositories with submodule services.
+> **Note**: 
+> - Sonar is skipped on PRs to prevent PR decoration conflicts when workflows run in parent repositories with submodule services.
+> - Deploy is skipped on PRs - Docker images are only built and pushed on main branch.
 
 ### UI Services
+
+**On Pull Requests:**
+1. **build** (15 min timeout): Build parent-pom, base-platform, and UI service
+
+**On Main Branch:**
 1. **build** (15 min timeout): Build parent-pom, base-platform, and UI service
 2. **deploy** (15 min timeout): Package, build Docker image, and push to DockerHub
 

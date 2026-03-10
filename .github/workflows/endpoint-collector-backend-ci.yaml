@@ -40,28 +40,9 @@ jobs:
       sonar-project-key: "hvantran_external-endpoint-collector"
       docker-image-name: "endpoint-collector-backend"
       jacoco-enabled: false
-      build-native: false
+      build-native: true
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: endpoint-collector-backend
-          path: services/external-endpoint-collector/endpoint-collector-backend/**/*.jar
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set VERSION environment variable
-        run: |
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-      - name: Build and push
-        run: |
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f services/external-endpoint-collector/endpoint-collector-backend spring-boot:build-image
-          docker tag endpoint-collector-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:latest
-          docker tag endpoint-collector-backend:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:1.0.${{github.run_number}}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/endpoint-collector-backend:1.0.${{github.run_number}}

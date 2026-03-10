@@ -55,6 +55,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Only deploy on push to main, skip on PRs
+    if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v4
         with:
