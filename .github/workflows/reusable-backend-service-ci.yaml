@@ -101,6 +101,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Only run Sonar on main branch to avoid PR decoration issues with submodules
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -117,7 +119,7 @@ jobs:
           mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=${{ inputs.sonar-project-key }} sonar:sonar -f ${{ inputs.service-path }}
 
   deploy:
-    needs: sonar
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
