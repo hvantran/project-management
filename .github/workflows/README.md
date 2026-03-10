@@ -16,9 +16,11 @@ Instead of duplicating the same build/test/deploy logic across 9+ service workfl
 - Build job (Maven clean install with parent-pom and base-platform)
 - Test job (JUnit tests with test-reporter)
 - Optional JaCoCo coverage reports
-- Sonar job (SonarCloud quality gate)
+- Sonar job (SonarCloud quality gate, **runs only on main branch**)
 - Deploy job (Docker build and push to DockerHub)
 - Optional native image build support
+
+**Important**: Sonar analysis only runs on pushes to `main` branch to avoid PR decoration conflicts with submodules.
 
 **Parameters**:
 - `service-name`: Display name for the service
@@ -187,10 +189,19 @@ All workflows set `CI: false` to avoid strict mode warnings during builds.
 ## Job Workflow
 
 ### Backend Services
+
+**On Pull Requests:**
 1. **build** (20 min timeout): Build parent-pom, base-platform, and service
 2. **test** (25 min timeout): Run tests, generate coverage (optional), report results
-3. **sonar** (20 min timeout): Run SonarCloud analysis and quality gate
-4. **deploy** (25 min timeout): Build Docker image, tag, and push to DockerHub
+3. **deploy** (25 min timeout): Build Docker image, tag, and push to DockerHub
+
+**On Main Branch:**
+1. **build** (20 min timeout): Build parent-pom, base-platform, and service
+2. **test** (25 min timeout): Run tests, generate coverage (optional), report results
+3. **sonar** (20 min timeout): Run SonarCloud analysis and quality gate (runs in parallel with deploy)
+4. **deploy** (25 min timeout): Build Docker image, tag, and push to DockerHub (runs in parallel with sonar)
+
+> **Note**: Sonar is skipped on PRs to prevent PR decoration conflicts when workflows run in parent repositories with submodule services.
 
 ### UI Services
 1. **build** (15 min timeout): Build parent-pom, base-platform, and UI service
