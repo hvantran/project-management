@@ -32,7 +32,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -50,8 +50,8 @@ jobs:
           mvn clean -f services/template-management-app/template-manager-backend dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/template-management-app/template-manager-backend
 
-  Test:
-    needs: Build
+  test:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -75,8 +75,8 @@ jobs:
           reporter: java-junit
           fail-on-error: true
 
-  Deploy:
-    needs: Test
+  deploy:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:

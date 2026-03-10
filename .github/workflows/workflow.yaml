@@ -21,7 +21,7 @@ permissions:
   security-events: write
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -34,8 +34,8 @@ jobs:
       - name: Run Maven Build Command
         run: mvn clean install -Ddockerfile.skip=true -DskipTests -P prod
 
-  Test:
-    needs: Build
+  test:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -55,8 +55,8 @@ jobs:
           reporter: java-junit
           fail-on-error: false
 
-  Sonar:
-    needs: Test
+  sonar:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

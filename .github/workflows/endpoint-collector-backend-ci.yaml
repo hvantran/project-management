@@ -32,7 +32,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -50,8 +50,8 @@ jobs:
           mvn clean -f services/external-endpoint-collector/endpoint-collector-backend dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-backend
   
-  Test:
-    needs: Build
+  test:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -74,8 +74,8 @@ jobs:
           path: "services/external-endpoint-collector/endpoint-collector-backend/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
-  Sonar:
-    needs: Test
+  sonar:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -92,8 +92,8 @@ jobs:
           mvn clean install -f parent-pom &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_external-endpoint-collector sonar:sonar -f services/external-endpoint-collector
-  Deploy:
-    needs: Sonar
+  deploy:
+    needs: sonar
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
