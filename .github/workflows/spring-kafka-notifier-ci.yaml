@@ -32,7 +32,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -50,8 +50,8 @@ jobs:
           mvn clean -f services/spring-kafka-notifier dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/spring-kafka-notifier
 
-  Test:
-    needs: Build
+  test:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -83,8 +83,8 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: services/spring-kafka-notifier/target/site/jacoco/jacoco.csv
-  Sonar:
-    needs: Test
+  sonar:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -101,8 +101,8 @@ jobs:
           mvn clean install -f parent-pom &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_spring-kafka-notifier sonar:sonar -f services/spring-kafka-notifier
-  Deploy:
-    needs: Sonar
+  deploy:
+    needs: sonar
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:

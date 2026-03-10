@@ -32,7 +32,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -48,8 +48,8 @@ jobs:
           mvn clean install -DskipTests -P prod -f base-platform &&
           mvn clean install -DskipTests -P prod -f services/action-manager-app/action-manager-ui
 
-  Deploy:
-    needs: Build
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
