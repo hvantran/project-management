@@ -148,7 +148,7 @@ jobs:
       - name: Build and push (standard)
         if: ${{ !inputs.build-native }}
         run: |
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f ${{ inputs.service-path }}
+          mvn clean install -DskipTests -P prod -f ${{ inputs.service-path }}
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
