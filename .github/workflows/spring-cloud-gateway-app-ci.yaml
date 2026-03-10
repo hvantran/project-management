@@ -10,24 +10,35 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/spring-cloud-gateway-app-ci.yaml"
       - "base-platform/common-apps/spring-cloud-gateway-app/**"
+      - "parent-pom/**"
   pull_request:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/spring-cloud-gateway-app-ci.yaml"
       - "base-platform/common-apps/spring-cloud-gateway-app/**"
+      - "parent-pom/**"
       
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   Build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Run maven build
         run: |
@@ -38,12 +49,13 @@ jobs:
   Test:
     needs: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Run maven test
         run: |
@@ -61,12 +73,13 @@ jobs:
   Deploy:
     needs: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Run maven package
         run: |

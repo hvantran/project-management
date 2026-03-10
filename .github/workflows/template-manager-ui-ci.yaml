@@ -9,65 +9,55 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/template-manager-ui-ci.yaml"
+      - "services/template-management-app/template-manager-ui/**"
+      - "parent-pom/**"
+      - "base-platform/**"
   pull_request:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/template-manager-ui-ci.yaml"
+      - "services/template-management-app/template-manager-ui/**"
+      - "parent-pom/**"
+      - "base-platform/**"
       
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   Build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Run maven build
         run: |
           mvn clean install -DskipTests -P prod -f parent-pom &&
           mvn clean install -DskipTests -P prod -f base-platform &&
           mvn clean install -DskipTests -P prod -f services/template-management-app/template-manager-ui
-      #- name: Analyze with sonar cloud
-      #  env:
-      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #  run: |
-      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_parent-pom -f parent-pom;
-      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_base-platform -f base-platform;
-      #    mvn sonar:sonar -Dsonar.projectKey=hvantran_template-manager-ui -f services/template-manager-ui
 
-  #Unit-Tests:
-  #  needs: Build
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - uses: actions/checkout@v4
-  #      with:
-  #        submodules: recursive
-  #        token: ${{ secrets.ACCESS_TOKEN }}
-  #        fetch-depth: 0
-  #    - uses: ./.github/workflows/actions
-  #    - run: yarn test
-  #    - name: Unit test results
-  #      uses: dorny/test-reporter@v1
-  #      if: failure()
-  #      with:
-  #        name: Unit-Test-Results
-  #        path: "services/template-management-app/template-manager-ui/**/surefire-reports/*.xml"
-  #        reporter: jest-junit
-  #        fail-on-error: true
   Deploy:
     needs: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Run maven package
         run: mvn clean package -DskipTests -P prod -f services/template-management-app/template-manager-ui
