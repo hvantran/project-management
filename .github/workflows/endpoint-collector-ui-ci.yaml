@@ -1,14 +1,12 @@
 name: endpoint-collector-ui service ci
 
-env:
-   CI: false
-
 on:
   push:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-ui-ci.yaml"
+      - ".github/workflows/reusable-ui-service-ci.yaml"
       - "services/external-endpoint-collector/endpoint-collector-ui/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -17,6 +15,7 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-ui-ci.yaml"
+      - ".github/workflows/reusable-ui-service-ci.yaml"
       - "services/external-endpoint-collector/endpoint-collector-ui/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -32,44 +31,15 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven build
-        run: |
-          mvn clean install -DskipTests -P prod -f parent-pom &&
-          mvn clean install -DskipTests -P prod -f base-platform &&
-          mvn clean install -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-ui
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven package
-        run: mvn clean package -DskipTests -P prod -f services/external-endpoint-collector/endpoint-collector-ui
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        uses:  docker/build-push-action@v5
-        with:
-          context: ./services/external-endpoint-collector/endpoint-collector-ui
-          file: ./services/external-endpoint-collector/endpoint-collector-ui/Dockerfile
-          push: true
-          tags: tranvanhoa2810/endpoint-collector-ui:latest,tranvanhoa2810/endpoint-collector-ui:1.0.${{github.run_number}}
+  ci:
+    uses: ./.github/workflows/reusable-ui-service-ci.yaml
+    with:
+      service-name: "endpoint-collector-ui"
+      service-path: "services/external-endpoint-collector/endpoint-collector-ui"
+      docker-image-name: "endpoint-collector-ui"
+      docker-context: "./services/external-endpoint-collector/endpoint-collector-ui"
+      dockerfile-path: "./services/external-endpoint-collector/endpoint-collector-ui/Dockerfile"
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

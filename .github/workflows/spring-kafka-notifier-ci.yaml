@@ -1,14 +1,12 @@
 name: spring-kafka-notifier service ci
 
-env:
-  CI: false
-
 on:
   push:
     branches: [ "main" ]
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/spring-kafka-notifier-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
       - "services/spring-kafka-notifier/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -17,6 +15,7 @@ on:
     paths:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/spring-kafka-notifier-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
       - "services/spring-kafka-notifier/**"
       - "parent-pom/**"
       - "base-platform/**"
@@ -32,90 +31,20 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven build
-        run: |
-          mvn clean install -f parent-pom &&
-          mvn clean -f base-platform dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean -f services/spring-kafka-notifier dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f services/spring-kafka-notifier
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven test
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean install -Dmaven.test.failure.ignore=true -P test -f services/spring-kafka-notifier
-      - name: Unit test results
-        uses: dorny/test-reporter@v1
-        if: failure()
-        with:
-          name: Unit-Test-Results
-          path: "services/spring-kafka-notifier/**/surefire-reports/*.xml"
-          reporter: java-junit
-          fail-on-error: true
-      - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-report
-          path: services/spring-kafka-notifier/target/site/jacoco/
-      - name: Jacoco Badge Generator
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          jacoco-csv-file: services/spring-kafka-notifier/target/site/jacoco/jacoco.csv
-  sonar:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
-      - uses: ./.github/workflows/actions
-      - name: Analyze with sonar cloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn clean install -f parent-pom &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_spring-kafka-notifier sonar:sonar -f services/spring-kafka-notifier
-  deploy:
-    needs: sonar
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven package
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
+  ci:
+    uses: ./.github/workflows/reusable-backend-service-ci.yaml
+    with:
+      service-name: "spring-kafka-notifier"
+      service-path: "services/spring-kafka-notifier"
+      sonar-project-key: "hvantran_spring-kafka-notifier"
+      docker-image-name: "spring-kafka-notifier"
+      jacoco-enabled: true
+      build-native: false
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: spring-kafka-notifier
