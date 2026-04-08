@@ -184,8 +184,138 @@ Tests still passing.
 
 Related to hvantran/project-management#130"
 
-# Push to child repo
-git push origin feature/action-manager-130-implement-oauth2-service
+# 🚨 MANDATORY: Verify build before pushing
+# Backend (Java/Maven)
+mvn clean verify
+# OR
+mvn clean test
+
+# Frontend (React/Node)
+cd action-manager-ui
+npm run build
+npm test
+cd ..
+
+# Only push if build succeeds
+if [ $? -eq 0 ]; then
+    git push origin feature/action-manager-130-implement-oauth2-service
+else
+    echo "❌ BUILD FAILED - Fix errors before pushing!"
+    exit 1
+fi
+```
+
+## 🚨 Build Verification (MANDATORY Quality Gate)
+
+**CRITICAL RULE:** Never push code that doesn't build successfully!
+
+### Why Build Verification Matters
+- ✅ Prevents broken code in repository
+- ✅ Ensures all tests pass before sharing
+- ✅ Validates dependencies and configurations
+- ✅ Catches compilation errors early
+- ✅ Maintains team productivity (no broken builds)
+
+### Build Commands by Project Type
+
+#### Java Backend (Maven)
+```bash
+# Full verification (recommended)
+mvn clean verify
+# Includes: compile, test, integration-test, package
+
+# Quick verification
+mvn clean test
+
+# Check specific module
+cd services/action-manager-app
+mvn clean install
+```
+
+#### Java Backend (Gradle)
+```bash
+# Full build
+./gradlew clean build
+
+# Tests only
+./gradlew clean test
+
+# Skip tests (NOT recommended for push)
+./gradlew clean build -x test
+```
+
+#### Frontend (React/Node)
+```bash
+cd action-manager-ui
+
+# Install dependencies if needed
+npm install
+
+# Run build
+npm run build
+
+# Run tests
+npm test
+
+# Run both
+npm run build && npm test
+```
+
+#### Monorepo (Parent + Modules)
+```bash
+# From project root
+mvn clean install -DskipTests=false
+
+# Specific service
+cd services/action-manager-app
+mvn clean verify
+cd ../..
+```
+
+### Build Success Criteria
+- ✅ Exit code 0 (success)
+- ✅ No compilation errors
+- ✅ All tests passing
+- ✅ No critical linting errors
+- ✅ All dependencies resolved
+
+### Build Failure Response
+```bash
+# If build fails:
+1. ❌ DO NOT PUSH - Fix errors first
+2. 🔍 Read error messages carefully
+3. 🔧 Fix compilation/test errors
+4. ♻️  Rerun build verification
+5. ✅ Push only when build succeeds
+```
+
+### Automated Build Check Script
+```bash
+#!/bin/bash
+# save as: .git/hooks/pre-push
+
+echo "🔍 Running build verification..."
+
+# Detect project type and run appropriate build
+if [ -f "pom.xml" ]; then
+    echo "📦 Maven project detected"
+    mvn clean verify
+elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+    echo "📦 Gradle project detected"
+    ./gradlew clean build
+elif [ -f "package.json" ]; then
+    echo "📦 Node project detected"
+    npm run build && npm test
+fi
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo "❌ BUILD FAILED - Push rejected!"
+    echo "Fix build errors before pushing."
+    exit 1
+fi
+
+echo "✅ Build successful - Proceeding with push"
 ```
 
 ### 4. Create Pull Request (Child Repo)
@@ -398,6 +528,7 @@ public void verifyBalance(double expectedBalance) {
 - Apply coding standards and best practices
 
 ### 2. Code Quality
+- 🚨 **VERIFY BUILD SUCCESS BEFORE PUSH** (mandatory quality gate)
 - Write comprehensive unit tests
 - Perform self-code reviews
 - Refactor code for clarity and performance
@@ -430,7 +561,9 @@ public void verifyBalance(double expectedBalance) {
 3. Follow TDD Red-Green-Refactor cycle
 4. Commit frequently with issue references: `Related to #<issue>`
 5. Update task progress in issue comments
-6. Push branch and create PR when ready
+6. 🚨 **VERIFY BUILD SUCCESS**: Run `mvn clean verify` OR `npm build && npm test`
+7. Push branch only if build succeeds
+8. Create PR when ready
 
 ### Phase 3: Review & Testing (PR-Driven)
 1. Create PR linking to task issue: `Closes #<task>` and user story: `Related to #<story>`
@@ -477,6 +610,7 @@ public void verifyBalance(double expectedBalance) {
 - [ ] Update issue with progress comments
 
 ### Before Creating PR
+- [ ] 🚨 **BUILD SUCCESS VERIFIED** (Maven/Gradle clean install OR npm build)
 - [ ] All tests pass (unit + integration)
 - [ ] Code coverage meets threshold (80%+)
 - [ ] No linting errors or warnings
