@@ -64,6 +64,8 @@ Instructions for building high-quality ReactJS applications with modern patterns
 - Use CSS custom properties (variables) for theming
 - Implement consistent spacing, typography, and color systems
 - Ensure accessibility with proper ARIA attributes and semantic HTML
+- Prefer semantic HTML + Tailwind utility classes for new shared UI components in this workspace
+- Avoid introducing new Material UI (`@mui/material`) primitives and avoid `sx`-driven styling in refactored/new component atoms
 
 ### Performance Optimization
 - Use `React.memo` for component memoization when appropriate

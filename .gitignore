@@ -31,3 +31,5 @@ hs_err_pid*
 
 # Agent work files (may contain sensitive development data)
 .agent_work/
+
+.env
