@@ -34,3 +34,6 @@
 [submodule "deployment-new"]
 	path = deployment-new
 	url = git@github.com:hvantran/deployment-new.git
+[submodule "services/exam-integrity-app"]
+	path = services/exam-integrity-app
+	url = git@github.com:hvantran/exam-integrity-app.git
