@@ -5,6 +5,7 @@ This workspace is a multi-repo monorepo. Prefer linked docs over duplicated guid
 - Root overview: [README.md](README.md)
 - Shared React baseline: [.github/instructions/reactjs.instructions.md](.github/instructions/reactjs.instructions.md)
 - Frontend atomic/storybook/tailwind policy: [.github/instructions/frontend-atomic-storybook.instructions.md](.github/instructions/frontend-atomic-storybook.instructions.md)
+- Action Manager http-request-monitor pollers (Lazada/Hasaki factory + Mongo GraalJS): [.cursor/skills/creating-http-request-monitor-poller/SKILL.md](.cursor/skills/creating-http-request-monitor-poller/SKILL.md)
 
 ## Repository Boundaries
 
