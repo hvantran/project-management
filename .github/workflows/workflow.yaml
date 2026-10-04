@@ -17,9 +17,6 @@ concurrency:
 
 permissions:
   contents: read
-  pull-requests: write
-  security-events: write
-  checks: write
 
 jobs:
   build:
@@ -39,6 +36,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v5
         with:
@@ -49,7 +50,7 @@ jobs:
       - name: Run Maven Test Command
         run: mvn test -Dmaven.test.failure.ignore=true -P test
       - name: Unit Test Results
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5 # v1.9.1
         with:
           name: Unit-Test-Results
           path: "**/surefire-reports/*.xml"
@@ -71,4 +72,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean compile test-compile sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_project-management
+          mvn clean compile test-compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_project-management
