@@ -46,7 +46,9 @@ jobs:
           fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Configure npm auth for GitHub Packages
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ACCESS_TOKEN }}" >> ~/.npmrc
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: echo "//npm.pkg.github.com/:_authToken=${ACCESS_TOKEN}" >> ~/.npmrc
       - name: Run maven build
         run: |
           mvn clean install -DskipTests -P prod -f parent-pom &&
@@ -69,7 +71,9 @@ jobs:
           fetch-depth: 1
       - uses: ./.github/workflows/actions
       - name: Configure npm auth for GitHub Packages
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ACCESS_TOKEN }}" >> ~/.npmrc
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: echo "//npm.pkg.github.com/:_authToken=${ACCESS_TOKEN}" >> ~/.npmrc
       - name: Run maven package
         run: mvn clean package -DskipTests -P prod -f ${{ inputs.service-path }}
         env:
