@@ -56,4 +56,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_project-management
+          mvn sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.projectKey=hvantran_project-management
