@@ -13,11 +13,13 @@ Instead of duplicating the same build/test/deploy logic across 9+ service workfl
 **Purpose**: CI/CD for backend Java/Maven services with testing, SonarCloud analysis, and Docker deployment.
 
 **Includes**:
-- Build job (Maven clean install with parent-pom and base-platform)
-- Test job (JUnit tests with test-reporter)
-- Optional JaCoCo coverage reports
-- Sonar job (SonarCloud quality gate, **runs only on main branch**)
-- Deploy job (Docker build and push to DockerHub)
+- Unified `build` job consolidating build, test, SonarCloud, and deploy on a single runner
+- Single recursive checkout and JDK setup per pipeline run
+- Parent POM and base platform built once and reused across subsequent steps
+- JUnit tests with `test-reporter`
+- Optional JaCoCo coverage reports and badge generation
+- SonarCloud quality gate analysis reusing compiled classes (**runs only on main branch**)
+- Conditional Docker image build and push to DockerHub (**runs only on push to main branch**)
 - Optional native image build support
 
 **Important**: Sonar analysis only runs on pushes to `main` branch to avoid PR decoration conflicts with submodules.
@@ -43,8 +45,9 @@ Instead of duplicating the same build/test/deploy logic across 9+ service workfl
 **Purpose**: CI/CD for UI services with Maven and Docker deployment.
 
 **Includes**:
-- Build job (Maven clean install)
-- Deploy job (Docker build and push)
+- Unified `build` job combining Maven build and conditional Docker deployment on a single runner
+- Single recursive checkout and npm registry authentication per pipeline run
+- Conditional Docker image build and push to DockerHub (**runs only on push to main branch**)
 
 **Parameters**:
 - `service-name`: Display name for the service
@@ -64,9 +67,10 @@ Instead of duplicating the same build/test/deploy logic across 9+ service workfl
 **Purpose**: CI/CD for services within the base-platform module.
 
 **Includes**:
-- Build job (Build entire base-platform)
-- Test job (JUnit tests for specific service)
-- Deploy job (Docker build and push)
+- Unified `build` job combining base platform build, service tests, and conditional Docker deployment
+- Single recursive checkout per pipeline run
+- JUnit tests for specific service with `test-reporter`
+- Conditional Docker image build and push to DockerHub (**runs only on push to main branch**)
 
 **Parameters**:
 - `service-name`: Display name for the service
@@ -192,17 +196,17 @@ All workflows set `CI: false` to avoid strict mode warnings during builds.
 
 ## Job Workflow
 
+Workflows use a single consolidated runner job (`build`) to eliminate redundant checkouts, repeated JDK/Node configurations, and duplicate Maven compilations across pipeline stages.
+
 ### Backend Services
 
-**On Pull Requests:**
-1. **build** (20 min timeout): Build parent-pom, base-platform, and service
-2. **test** (25 min timeout): Run tests, generate coverage (optional), report results
-
-**On Main Branch:**
-1. **build** (20 min timeout): Build parent-pom, base-platform, and service
-2. **test** (25 min timeout): Run tests, generate coverage (optional), report results
-3. **sonar** (20 min timeout): Run SonarCloud analysis and quality gate (runs in parallel with deploy)
-4. **deploy** (25 min timeout): Build Docker image, tag, and push to DockerHub (runs in parallel with sonar)
+All stages run sequentially on a single runner VM:
+1. **Checkout & Setup**: Single checkout with submodules (`fetch-depth: 0`) and Java 21 / Maven cache configuration.
+2. **Compile Parent & Base Platform**: Builds `parent-pom` and `base-platform` once.
+3. **Run Tests**: Tests service with `-P test`, reusing the installed dependencies.
+4. **Publish Test Results**: Reports JUnit results via `dorny/test-reporter` and generates JaCoCo artifacts if enabled.
+5. **SonarCloud Analysis (main branch only)**: Reuses existing compiled classes and surefire reports; no clean or recompile.
+6. **Docker Build & Push (main push only)**: Reuses pre-built artifacts to build and publish Docker image to Docker Hub.
 
 > **Note**: 
 > - Sonar is skipped on PRs to prevent PR decoration conflicts when workflows run in parent repositories with submodule services.
@@ -210,12 +214,9 @@ All workflows set `CI: false` to avoid strict mode warnings during builds.
 
 ### UI Services
 
-**On Pull Requests:**
-1. **build** (15 min timeout): Build parent-pom, base-platform, and UI service
-
-**On Main Branch:**
-1. **build** (15 min timeout): Build parent-pom, base-platform, and UI service
-2. **deploy** (15 min timeout): Package, build Docker image, and push to DockerHub
+1. **Checkout & Setup**: Single checkout with submodules (`fetch-depth: 1`), Java 21, and GitHub Packages npm registry authentication.
+2. **Build**: Builds `parent-pom`, `base-platform`, and UI service once.
+3. **Docker Build & Push (main push only)**: Builds and publishes Docker image to Docker Hub without re-checking out or rebuilding.
 
 ## Maintenance
 
