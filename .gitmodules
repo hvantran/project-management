@@ -10,9 +10,6 @@
 [submodule "account-platform"]
 	path = account-platform
 	url = git@github.com:hvantran/account-platform.git
-[submodule "e-commerce"]
-	path = services/ecommerce-stats-app
-	url = git@github.com:hvantran/e-commerce.git
 [submodule "services/template-management-app"]
 	path = services/template-management-app
 	url = git@github.com:hvantran/template-management-app.git
