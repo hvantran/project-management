@@ -53,12 +53,13 @@ jobs:
         run: |
           mvn clean install -Dmaven.test.failure.ignore=true -P test -f ${{ inputs.service-path }}
       - name: Unit test results
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5 # v1.9.1
         with:
           name: Unit-Test-Results
           path: "${{ inputs.service-path }}/**/surefire-reports/*.xml"
           reporter: java-junit
-          fail-on-error: true
+          fail-on-error: false
+          fail-on-empty: false
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v5

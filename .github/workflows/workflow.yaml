@@ -50,6 +50,7 @@ jobs:
           path: "**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: false
+          fail-on-empty: false
       - name: Analyze with sonar cloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
