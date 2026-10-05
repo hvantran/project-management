@@ -37,7 +37,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
         with:
@@ -45,67 +45,38 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           fetch-depth: 1
       - uses: ./.github/workflows/actions
-      - name: Run maven build
+      - name: Build parent-pom and base-platform
         run: |
           mvn clean install -f parent-pom &&
-          mvn clean -f base-platform dependency:tree &&
           mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
       - name: Run maven test
         run: |
-          mvn clean install -f parent-pom && 
           mvn clean install -Dmaven.test.failure.ignore=true -P test -f ${{ inputs.service-path }}
       - name: Unit test results
         uses: dorny/test-reporter@v1
-        if: failure()
         with:
           name: Unit-Test-Results
           path: "${{ inputs.service-path }}/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    # Only deploy on push to main, skip on PRs
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven package
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
-      - uses: actions/upload-artifact@v5
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ inputs.service-name }}
           path: ${{ inputs.service-path }}/target/*.jar
       - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set VERSION environment variable
+        if: github.event_name != 'pull_request'
         run: |
-          cd ${{ inputs.service-path }}
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f ${{ inputs.service-path }})" >> $GITHUB_ENV
       - name: Build and push
+        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v6
         with:
           context: ${{ inputs.docker-context }}

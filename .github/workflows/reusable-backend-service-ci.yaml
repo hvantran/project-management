@@ -45,41 +45,23 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v5
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
+          fetch-depth: 0
       - uses: ./.github/workflows/actions
-      - name: Run maven build
+      - name: Build parent-pom and base-platform
         run: |
           mvn clean install -f parent-pom &&
-          mvn clean -f base-platform dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
-          mvn clean -f ${{ inputs.service-path }} dependency:tree &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f ${{ inputs.service-path }}
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
+          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
       - name: Run maven test
         run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform &&
           mvn clean install -Dmaven.test.failure.ignore=true -P test -f ${{ inputs.service-path }}
       - name: Unit test results
         uses: dorny/test-reporter@v1
-        if: failure()
         with:
           name: Unit-Test-Results
           path: "${{ inputs.service-path }}/**/surefire-reports/*.xml"
@@ -96,69 +78,40 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: ${{ inputs.service-path }}/target/site/jacoco/jacoco.csv
-
-  sonar:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    # Only run Sonar on main branch to avoid PR decoration issues with submodules
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
-      - uses: ./.github/workflows/actions
       - name: Analyze with sonar cloud
+        if: github.ref == 'refs/heads/main'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean install -f parent-pom &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -f base-platform &&
-          mvn clean install -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=${{ inputs.sonar-project-key }} sonar:sonar -f ${{ inputs.service-path }}
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    # Only deploy on push to main, skip on PRs
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 1
-      - uses: ./.github/workflows/actions
-      - name: Run maven package
-        run: |
-          mvn clean install -f parent-pom && 
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P prod -f base-platform
-      - uses: actions/upload-artifact@v5
+          mvn -Ddockerfile.skip=true -DskipTests -Dsonar.qualitygate.wait=true -Dsonar.projectKey=${{ inputs.sonar-project-key }} sonar:sonar -f ${{ inputs.service-path }}
+      - name: Upload build artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ inputs.service-name }}
           path: ${{ inputs.service-path }}/**/*.jar
       - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set VERSION environment variable
+        if: github.event_name != 'pull_request'
         run: |
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f ${{ inputs.service-path }})" >> $GITHUB_ENV
       - name: Build and push (standard)
-        if: ${{ !inputs.build-native }}
+        if: github.event_name != 'pull_request' && !inputs.build-native
         run: |
-          mvn clean install -DskipTests -P prod -f ${{ inputs.service-path }}
+          mvn install -DskipTests -P prod -f ${{ inputs.service-path }}
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
       - name: Build and push (native)
-        if: inputs.build-native
+        if: github.event_name != 'pull_request' && inputs.build-native
         run: |
-          mvn clean install -Ddockerfile.skip=true -DskipTests -P native -f ${{ inputs.service-path }} spring-boot:build-image -Dspring-boot.build-image.imageName=${{ inputs.docker-image-name }}:${{ env.VERSION }}
+          mvn install -Ddockerfile.skip=true -DskipTests -P native -f ${{ inputs.service-path }} spring-boot:build-image -Dspring-boot.build-image.imageName=${{ inputs.docker-image-name }}:${{ env.VERSION }}
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
