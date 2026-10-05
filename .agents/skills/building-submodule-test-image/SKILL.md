@@ -33,6 +33,8 @@ Use this workflow to build, publish, and test Docker images for submodule featur
 | `services/external-endpoint-collector` | Backend | `endpoint-collector-backend-ci.yaml` | `endpoint-collector-backend` |
 | `services/ecommerce-stats-app` | Backend | `ecommerce-stats-app-ci.yaml` | `ecommerce-stats-app` |
 | `services/spring-kafka-notifier` | Backend | `spring-kafka-notifier-ci.yaml` | `spring-kafka-notifier` |
+| `services/exam-integrity-app` | UI | `exam-integrity-ui-ci.yaml` | `exam-integrity-ui` |
+| `services/exam-integrity-app` | Backend | `exam-integrity-backend-ci.yaml` | `exam-integrity-backend` |
 | `base-platform` | Gateway | `spring-cloud-gateway-app-ci.yaml` | `spring-cloud-gateway-app` |
 
 ---

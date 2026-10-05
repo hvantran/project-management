@@ -1,0 +1,48 @@
+name: exam-integrity-backend service ci
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/exam-integrity-backend-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
+      - "services/exam-integrity-app/**"
+      - "parent-pom/**"
+      - "base-platform/**"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/exam-integrity-backend-ci.yaml"
+      - ".github/workflows/reusable-backend-service-ci.yaml"
+      - "services/exam-integrity-app/**"
+      - "parent-pom/**"
+      - "base-platform/**"
+      
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  ci:
+    uses: ./.github/workflows/reusable-backend-service-ci.yaml
+    with:
+      service-name: "exam-integrity-backend"
+      service-path: "services/exam-integrity-app/exam-integrity-backend"
+      sonar-project-key: "hvantran_exam-integrity-app"
+      docker-image-name: "exam-integrity-backend"
+      jacoco-enabled: true
+      build-native: true
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

@@ -36,6 +36,7 @@ Instead of duplicating the same build/test/deploy logic across 9+ service workfl
 - ecommerce-stats-app
 - spring-kafka-notifier
 - template-manager-backend
+- exam-integrity-backend
 
 ### 2. `reusable-ui-service-ci.yaml`
 
@@ -56,6 +57,7 @@ Instead of duplicating the same build/test/deploy logic across 9+ service workfl
 - action-manager-ui
 - endpoint-collector-ui
 - template-manager-ui
+- exam-integrity-ui
 
 ### 3. `reusable-base-platform-service-ci.yaml`
 

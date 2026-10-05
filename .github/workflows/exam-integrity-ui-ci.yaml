@@ -1,0 +1,46 @@
+name: exam-integrity-ui service ci
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/exam-integrity-ui-ci.yaml"
+      - ".github/workflows/reusable-ui-service-ci.yaml"
+      - "services/exam-integrity-app/exam-integrity-ui/**"
+      - "parent-pom/**"
+      - "base-platform/**"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/actions/action.yaml"
+      - ".github/workflows/exam-integrity-ui-ci.yaml"
+      - ".github/workflows/reusable-ui-service-ci.yaml"
+      - "services/exam-integrity-app/exam-integrity-ui/**"
+      - "parent-pom/**"
+      - "base-platform/**"
+      
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  ci:
+    uses: ./.github/workflows/reusable-ui-service-ci.yaml
+    with:
+      service-name: "exam-integrity-ui"
+      service-path: "services/exam-integrity-app/exam-integrity-ui"
+      docker-image-name: "exam-integrity-ui"
+      docker-context: "./services/exam-integrity-app/exam-integrity-ui"
+      dockerfile-path: "./services/exam-integrity-app/exam-integrity-ui/Dockerfile"
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
