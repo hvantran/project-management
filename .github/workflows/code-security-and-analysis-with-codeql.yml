@@ -58,6 +58,10 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         fetch-depth: 1
     - uses: ./.github/workflows/actions
+    - name: Configure npm auth for GitHub Packages
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      run: echo "//npm.pkg.github.com/:_authToken=${ACCESS_TOKEN}" >> ~/.npmrc
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
