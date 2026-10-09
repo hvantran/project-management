@@ -7,8 +7,6 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/external-endpoint-collector/endpoint-collector-backend/**"
-      - "services/external-endpoint-collector/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
   pull_request:
@@ -17,8 +15,6 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/endpoint-collector-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/external-endpoint-collector/endpoint-collector-backend/**"
-      - "services/external-endpoint-collector/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
   

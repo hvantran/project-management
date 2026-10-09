@@ -7,9 +7,6 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/exam-integrity-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/exam-integrity-app/exam-integrity-backend/**"
-      - "services/exam-integrity-app/pdf-ingestion-service/**"
-      - "services/exam-integrity-app/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
   pull_request:
@@ -18,9 +15,6 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/exam-integrity-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/exam-integrity-app/exam-integrity-backend/**"
-      - "services/exam-integrity-app/pdf-ingestion-service/**"
-      - "services/exam-integrity-app/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
       

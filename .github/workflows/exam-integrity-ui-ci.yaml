@@ -7,7 +7,6 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/exam-integrity-ui-ci.yaml"
       - ".github/workflows/reusable-ui-service-ci.yaml"
-      - "services/exam-integrity-app/exam-integrity-ui/**"
       - "parent-pom/**"
       - "base-platform/**"
   pull_request:
@@ -16,7 +15,6 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/exam-integrity-ui-ci.yaml"
       - ".github/workflows/reusable-ui-service-ci.yaml"
-      - "services/exam-integrity-app/exam-integrity-ui/**"
       - "parent-pom/**"
       - "base-platform/**"
       
@@ -38,9 +36,9 @@ jobs:
       service-name: "exam-integrity-ui"
       service-path: "services/exam-integrity-app/exam-integrity-ui"
       docker-image-name: "exam-integrity-ui"
-      docker-context: "./services/exam-integrity-app/exam-integrity-ui"
-      dockerfile-path: "./services/exam-integrity-app/exam-integrity-ui/Dockerfile"
+      node-version: "20.19.0"
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
