@@ -7,7 +7,8 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/action-manager-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/action-manager-app/**"
+      - "services/action-manager-app/action-manager-backend/**"
+      - "services/action-manager-app/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
   pull_request:
@@ -16,7 +17,8 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/action-manager-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/action-manager-app/**"
+      - "services/action-manager-app/action-manager-backend/**"
+      - "services/action-manager-app/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
       

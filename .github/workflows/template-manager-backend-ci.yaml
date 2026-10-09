@@ -7,7 +7,8 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/template-manager-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/template-management-app/**"
+      - "services/template-management-app/template-manager-backend/**"
+      - "services/template-management-app/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
   pull_request:
@@ -16,7 +17,8 @@ on:
       - ".github/workflows/actions/action.yaml"
       - ".github/workflows/template-manager-backend-ci.yaml"
       - ".github/workflows/reusable-backend-service-ci.yaml"
-      - "services/template-management-app/**"
+      - "services/template-management-app/template-manager-backend/**"
+      - "services/template-management-app/pom.xml"
       - "parent-pom/**"
       - "base-platform/**"
       
