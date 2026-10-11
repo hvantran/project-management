@@ -18,6 +18,12 @@ This workspace is a multi-repo monorepo. Prefer linked docs over duplicated guid
   - `services/template-management-app/template-manager-ui`
   - `services/exam-integrity-app/exam-integrity-ui`
 
+## Submodule PR & Notify-to-Parent Workflow
+
+- When modifying code within submodule repositories (`services/*`, `base-platform`, `parent-pom`, etc.), create branches and open Pull Requests **only in the submodule repository**.
+- **Do NOT create Pull Requests for the `project-management` repository** when changing submodules.
+- Submodule repositories run an automated notify-to-parent workflow (`send-submodule-updates-to-parent-repo-ci` / `notify-parent-ci.yaml`) on push/merge to `main` that automatically syncs and commits submodule pointer updates directly to `project-management`.
+
 ## Frontend Execution Defaults
 
 - Use Yarn for UI apps (`yarn install --frozen-lockfile`, `yarn build`, `yarn test`).

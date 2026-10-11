@@ -148,7 +148,10 @@ Co-authored-by: Name <email@example.com>
 
 ## Multi-Repository Commits
 
-When committing to **project-management** (the main repo with submodules):
+> [!NOTE]
+> You do **not** need to create a Pull Request in `project-management` when updating submodules. Submodule repositories have an automated notify-to-parent workflow (`send-submodule-updates-to-parent-repo-ci`) that automatically updates submodule pointers in `project-management` once the submodule PR is merged to `main`.
+
+When committing directly to **project-management** (the main repo with submodules):
 
 ```
 [project] Update submodule references for DevTools implementation
