@@ -42,3 +42,14 @@ This workspace is a multi-repo monorepo. Prefer linked docs over duplicated guid
 - Keep edits minimal and localized to the target service.
 - Do not refactor unrelated files while implementing a request.
 - When adding new frontend components, follow the atomic + Storybook + Tailwind policy file above.
+
+## Backend Exception Handling Standards
+
+Microservice backends use common advice handlers (`com.hoatv.springboot.common.advices.DefaultExceptionHandler`). When throwing exceptions from controllers, services, or managers, use standard domain exceptions so they map to correct HTTP response status codes:
+
+- **Entity Not Found (404 NOT_FOUND)**: Throw `EntityNotFoundException` (`com.hoatv.fwk.common.exceptions.EntityNotFoundException`).
+  - *Constraint*: NEVER throw `IllegalArgumentException` or `ResponseStatusException(HttpStatus.NOT_FOUND)` for missing entities or records.
+- **Invalid Input / State Preconditions (400 BAD_REQUEST)**: Throw `InvalidArgumentException` (`com.hoatv.fwk.common.exceptions.InvalidArgumentException`) or rely on Jakarta validation (`@Valid`, `@NotNull`, etc.). Avoid raw `IllegalStateException` or `IllegalArgumentException`.
+- **Conflict / Duplicates (409 CONFLICT)**: Throw `DuplicateResourceException` (`com.hoatv.fwk.common.exceptions.DuplicateResourceException`).
+- **Internal / Business Errors (500 INTERNAL_SERVER_ERROR)**: Throw `AppException` (`com.hoatv.fwk.common.exceptions.AppException`).
+- Avoid throwing `ResponseStatusException` in business/service layers; use standard framework domain exceptions.
