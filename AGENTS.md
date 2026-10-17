@@ -43,6 +43,15 @@ This workspace is a multi-repo monorepo. Prefer linked docs over duplicated guid
 - Do not refactor unrelated files while implementing a request.
 - When adding new frontend components, follow the atomic + Storybook + Tailwind policy file above.
 
+## UI Page Architecture & Component Encapsulation Standards
+
+- **Zero Raw HTML in Pages**: Service UI pages (e.g., `src/pages/*.tsx`) MUST NOT contain raw HTML elements (`<div>`, `<span>`, `<button>`, `<p>`, `<input>`, etc.). All page-level markup, layout structures, and composite UI sections must be encapsulated in components provided by `@hvantran/ui-component-library` (or app templates/layouts).
+- **Organism-Level Domain Components**: When extracting or creating domain-specific or app-prefixed components (such as `ExamIntegrity*` or app workspaces/cards/grids), they **MUST be defined at the `organisms/` layer** (or `templates/`) in `ui-component-library`.
+- **No App-Named Components in Molecules or Atoms**:
+  - `atoms/` and `molecules/` are strictly domain-agnostic, generic primitives.
+  - App-specific or domain-named components (e.g., `ExamIntegrity*`) are forbidden in `src/components/molecules/` or `src/components/atoms/`.
+- Every newly introduced organism component must include unit tests and Storybook stories (`*.stories.tsx`) within `base-platform/ui-component-library`.
+
 ## Backend Exception Handling Standards
 
 Microservice backends use common advice handlers (`com.hoatv.springboot.common.advices.DefaultExceptionHandler`). When throwing exceptions from controllers, services, or managers, use standard domain exceptions so they map to correct HTTP response status codes:

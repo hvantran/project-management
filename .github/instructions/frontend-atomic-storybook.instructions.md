@@ -14,6 +14,8 @@ Use this instruction for all web UI component work under service UI apps.
   - `molecules`
   - `organisms`
   - `templates`
+- **Zero Raw HTML in Pages**: Service UI pages (e.g., `src/pages/*.tsx`) must not contain raw HTML tags. All markup must be encapsulated into components from `@hvantran/ui-component-library`.
+- **Domain Components in Organisms Only**: Domain-specific or app-prefixed components (e.g., `ExamIntegrity*`) must live at the `organisms/` (or `templates/`) layer, never in `atoms/` or `molecules/`.
 - For composition patterns, use `services/exam-integrity-app/exam-integrity-ui/src/components` as reference.
 
 ## Storybook Coverage Rule
