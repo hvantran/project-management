@@ -100,7 +100,8 @@ jobs:
       - name: Set VERSION environment variable
         if: github.event_name != 'pull_request'
         run: |
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f ${{ inputs.service-path }})" >> $GITHUB_ENV
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f ${{ inputs.service-path }} | tr -d '\r' | tail -n 1)
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Build and push (standard)
         if: github.event_name != 'pull_request' && !inputs.build-native
         run: |
@@ -112,7 +113,7 @@ jobs:
       - name: Build and push (native)
         if: github.event_name != 'pull_request' && inputs.build-native
         run: |
-          mvn install -Ddockerfile.skip=true -DskipTests -P native -f ${{ inputs.service-path }} spring-boot:build-image -Dspring-boot.build-image.imageName=${{ inputs.docker-image-name }}:${{ env.VERSION }}
+          mvn install -Ddockerfile.skip=true -DskipTests -P native -f ${{ inputs.service-path }} spring-boot:build-image -Dspring-boot.build-image.imageName="${{ inputs.docker-image-name }}:${{ env.VERSION }}"
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest
           docker tag ${{ inputs.docker-image-name }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:1.0.${{github.run_number}}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-image-name }}:latest

@@ -2,10 +2,18 @@ runs:
   using: "composite"
   steps:
     - name: 'Set up JDK 21'
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
         java-version: '21'
+    - name: Configure Docker min-api-version for legacy client compatibility
+      shell: bash
+      run: |
+        if command -v docker >/dev/null 2>&1; then
+          sudo mkdir -p /etc/docker
+          sudo python3 -c "import json, os; p='/etc/docker/daemon.json'; d=json.load(open(p)) if os.path.exists(p) else {}; d['min-api-version']='1.24'; open(p,'w').write(json.dumps(d, indent=2))"
+          sudo systemctl restart docker || true
+        fi
     - name: Cache SonarCloud packages
       uses: actions/cache@v5
       with:
