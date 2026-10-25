@@ -5,9 +5,15 @@ This workspace is a multi-repo monorepo. Prefer linked docs over duplicated guid
 - Root overview: [README.md](README.md)
 - Shared React baseline: [.github/instructions/reactjs.instructions.md](.github/instructions/reactjs.instructions.md)
 - Frontend atomic/storybook/tailwind policy: [.github/instructions/frontend-atomic-storybook.instructions.md](.github/instructions/frontend-atomic-storybook.instructions.md)
+- Response style (simple and concise): [.agents/skills/simple-and-concise/SKILL.md](.agents/skills/simple-and-concise/SKILL.md)
 - Action Manager http-request-monitor pollers (Lazada/Hasaki factory + Mongo GraalJS): [.agents/skills/creating-http-request-monitor-poller/SKILL.md](.agents/skills/creating-http-request-monitor-poller/SKILL.md)
 - Fixing SonarQube / SonarCloud issues: [.agents/skills/fixing-sonarqube-issues/SKILL.md](.agents/skills/fixing-sonarqube-issues/SKILL.md)
 - Building test Docker images for submodules: [.agents/skills/building-submodule-test-image/SKILL.md](.agents/skills/building-submodule-test-image/SKILL.md)
+
+## Response Style
+
+- Apply [.agents/skills/simple-and-concise/SKILL.md](.agents/skills/simple-and-concise/SKILL.md) to every response.
+- Keep replies brief, plain, and answer-first without filler unless the user specifies otherwise.
 
 ## Repository Boundaries
 
